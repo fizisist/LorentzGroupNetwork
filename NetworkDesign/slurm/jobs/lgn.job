@@ -1,0 +1,2 @@
+python3 scripts/train_lgn.py --prefix=jan3 --datadir=./data/samples_h5/jet/run12/parton/noMPI --maxdim=3 --max-zf=1 --target=is_signal --num-workers=0 --num-channels=3 --level-gain=1 --num-epoch=10 --batch-size=10 --num-basis-fn=10 --num-cg-levels=3 --alpha=50 --scale=0.01 --lr-init=0.001 --lr-final=1e-05 --full-scalars=False --activation=elu --mlp=True
+
