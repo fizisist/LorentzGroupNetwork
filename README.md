@@ -29,6 +29,30 @@ The code in this repository can be broken down in three categories, correspondin
 - Python3 libraries: [h5py](https://www.h5py.org), [matplotlib](https://matplotlib.org), [numpy](https://numpy.org)
 - [ROOT](https://root.cern.ch) (& [PyROOT](https://root.cern.ch/pyroot))
 
+
+
+
+## Installation
+
+The easiest way is to install in top of a conda environment, via pip.
+LGN requires Python 3, PyTorch 1.2, CUDA 10, and a few more small packages.
+All these should be installed automatically when you run setup.py
+
+### Using pip
+``````````
+
+LGN is installable using pip.  You can currently install it from
+source by going to the directory with setup.py::
+
+    pip install lgn .
+
+If you would like to modify the source code directly, note that LGN
+can also be installed in "development mode" using the command::
+
+    pip install lgn -e .
+
+
+
 ## Running the Code: Top-Tagging
 In order to explain how to train the network, we will focus on the example of performing top-tagging using the reference dataset [here](https://zenodo.org/record/2603256) -- this is the dataset used in the summary paper ["The Machine Learning Landscape of Top Taggers"](https://arxiv.org/abs/1902.09914) by G. Kasieczka et. al.
 
