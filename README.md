@@ -39,7 +39,6 @@ LGN requires Python 3, PyTorch 1.2, CUDA 10, and a few more small packages.
 All these should be installed automatically when you run setup.py
 
 ### Using pip
-``````````
 
 LGN is installable using pip.  You can currently install it from
 source by going to the directory with setup.py::
