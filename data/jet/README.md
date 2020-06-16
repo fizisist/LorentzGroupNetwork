@@ -1,4 +1,4 @@
-# Data generation with `jet` (`condor` branch)
+# Data generation with `jet`
 
 This subdirectory contains the software package needed to generate your own training data for `CLARIANT`. Specifically, it can generate HDF5 data files, in which each entry (defined by the 1st index in the HDF5 file's datasets) corresponds with a jet produced in some kind of proton-proton collision -- this package allows for a large amount of configurability, so that the user can specify the types of events, how the jets are clustered, and how exactly they are selected per event & saved.
 
