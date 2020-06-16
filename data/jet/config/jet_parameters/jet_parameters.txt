@@ -1,0 +1,6 @@
+#Jet finder settings. All lines containing "#" will be treated as comments.
+power = -1
+R = 0.8
+pT_min = 15.
+eta_max = 2.
+n_constituents = 200

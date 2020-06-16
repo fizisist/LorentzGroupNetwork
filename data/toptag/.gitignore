@@ -1,0 +1,2 @@
+# Don't copy over my (local) data directory, that contains GB's of raw/converted toptag files. These are accessible on Google Drive.
+data/

@@ -1,0 +1,18 @@
+####################
+#
+# HTCondor submit description file
+#
+####################
+
+executable              = raw2h5.sh
+arguments               = "$FILENAME $ADD_BEAMS $DOT_PRODUCTS $PRECISION"
+should_transfer_files   = IF_NEEDED
+when_to_transfer_output = ON_EXIT
+initialdir              = run$(Process)
+transfer_input_files    = $FILENAME,../utils/condor/raw2h5.py,../utils/condor/pt.py,../utils/condor/dot.py,../utils/condor/simplify.py
+log                     = raw2h5.log
+error                   = raw2h5.err
+output                  = raw2h5.out
+
+
+queue $NJOBS

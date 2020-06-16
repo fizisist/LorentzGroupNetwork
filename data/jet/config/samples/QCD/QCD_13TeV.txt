@@ -1,0 +1,10 @@
+! QCD
+HardQCD:gg2qqbar = on
+HardQCD:qq2qq = on
+HardQCD:qqbar2qqbarNew = on ! scattering to light quarks
+HardQCD:nQuarkNew = 3 ! default value (no c or b quarks)
+Beams:idA = 2212
+Beams:idB = 2212
+Beams:eCM = 13000.
+PhaseSpace:pTHatMin = $MINIMUM_PT
+PhaseSpace:pTHatMax = $MAXIMUM_PT

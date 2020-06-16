@@ -1,0 +1,125 @@
+####################
+#      Config      #
+####################
+
+# Use "#" for comments.
+# Do *not* remove variables or change their names,
+# otherwise the generation code will not work
+# (and you will have to fix/redownload this file!)
+
+
+# 1) Process configuration.
+
+	# 1a) Chosen process
+
+	# Give a comma-separated list (spaces allowed). 
+	# See the samples subdirectory names to see which 
+	# processes are available. The names must match the
+	# subdirectory names, and there must be only one
+	# template per subdirectory.
+
+	#processes = Top_Wqq, QCD
+        processes = Top_Wqq
+
+	# 1b) pT boundaries
+
+	# Give pT values to use as bin edges for 
+	# the different samples. Each pT bin will
+	# correspond with one condor job.
+	# For infinity (valid as an upper bound), add
+	# 'inf' to the end of this list.
+
+	pT_cutoffs = 550,560,570,580,590,600,610,620,630,640,650
+	#pT_cutoffs = 550,560
+
+	# 1c) Number of events
+	
+	# Give the number of events to generate for
+	# each pT window.
+
+	Nevents = 100000
+
+	# 1d) Hadronization
+
+	# Determine whether or not to perform hadronization.
+	# 1 = on, 0 = off.
+
+	hadronization = 1
+
+	# 1e) Multi-Parton Interactions
+
+	# Determine whether or not to simulate MPI.
+	# 1 = on, 0 = off
+
+	mpi = 0
+
+	# 1f) Random Seed
+
+	# Seed for the Pythia8 RNG. Use this to generate
+	# unique samples for the same configuration.
+	# Must be integer greater than 0.
+
+	rng = 1
+
+# 2) Jet clustering
+
+	#2a) Power
+	
+	# Give a "power" for the generalized kT algo.
+	# -1 = anti-kt
+	#  0 = Cambrige/Aachen
+	#  1 = kt
+
+	power = -1
+
+	#2b) Radius
+
+	# Give the jet radius in eta-phi space.
+	
+	radius = 0.8
+
+	#2c) Minimum pT
+
+	# Give the minimum jet pT.
+
+	pT_min = 15.
+
+	#2d) Maxinimum eta
+
+	# Give the maximum (magnitude) of eta.
+	# For reference, eta_max = 4.9 corresponds
+	# with the maximum possible value for ALTAS,
+	# based on the LAr calorimeter geometry.
+	
+	eta_max = 2.
+
+	#2e) Number of constituents
+
+	# Give the maximum number of jet 
+	# constituents to save to our
+	# list of constituents. This is the
+	# the data that the Lorentz Group Network
+	# will actually use. For reference,
+	# n_constituents = 200 for the top-tagging
+	# reference dataset located at
+	# https://zenodo.org/record/2603256 .
+
+	n_constituents = 200
+
+# 3) Truth-level & Final-state Particles
+
+        #3a) Number of truth-level particles
+
+	# Give the maximum number of truth-level
+        # particles to save for each event.
+
+        n_truth = 3
+
+        #3b) Number of final-state particles
+
+        # Give the maximum number of final-state
+        # particles to save for each event.
+        # (This probably doesn't need to be changed)
+
+        n_final = 4000
+

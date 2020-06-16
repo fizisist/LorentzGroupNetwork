@@ -1,0 +1,10 @@
+! Top
+Top:gg2ttbar = on
+Top:qqbar2ttbar = on
+Top:ffbar2ttbar(s:gmZ) = on
+Top:gmgm2ttbar = on
+Beams:idA = 2212
+Beams:idB = 2212
+Beams:eCM = 13000.
+PhaseSpace:pTHatMin = $MINIMUM_PT
+PhaseSpace:pTHatMax = $MAXIMUM_PT

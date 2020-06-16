@@ -1,0 +1,18 @@
+####################
+#
+# HTCondor submit description file
+#
+####################
+
+executable              = plot.sh
+arguments               = "."
+should_transfer_files   = IF_NEEDED
+when_to_transfer_output = ON_EXIT
+initialdir              = run$(Process)
+transfer_input_files    = $FILENAMES,../utils/condor/plotting_h5.py,../utils/condor/nx.py
+log                     = plot.log
+error                   = plot.err
+output                  = plot.out
+
+
+queue $NJOBS

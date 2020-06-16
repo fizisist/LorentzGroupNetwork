@@ -1,0 +1,16 @@
+####################
+#
+# HTCondor submit description file
+#
+####################
+
+executable              = generate.sh
+#arguments               = ""
+should_transfer_files   = IF_NEEDED
+when_to_transfer_output = ON_EXIT
+initialdir              = run$(Process)
+transfer_input_files    = pythia_config.txt,config.txt,jet_parameters.txt,../utils/condor/generator.py,../utils/condor/pt2.py,../utils/condor/config.py,../utils/condor/truth_selector.py,../utils/condor/tpythia/rootlogon.C,../utils/condor/tpythia/TPythia8.cxx,../utils/condor/tpythia/TPythia8.h
+log                     = generate.log
+error                   = generate.err
+output                  = generate.out
+queue $NJOBS

@@ -1,0 +1,16 @@
+####################
+#
+# HTCondor submit description file
+#
+####################
+
+executable              = concat.sh
+arguments               = "$FILE1 $FILE2 $OUTPUT $COMP_LEVEL"
+should_transfer_files   = IF_NEEDED
+when_to_transfer_output = ON_EXIT
+initialdir              = concat_job$(Process)
+transfer_input_files    = $FILE1,$FILE2,../utils/concat.py
+log                     = concat.log
+error                   = concat.err
+output                  = concat.out
+queue $NJOBS
