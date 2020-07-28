@@ -39,6 +39,7 @@ def main(args):
     if(ndivisions = -1):
         print('Performing conversion locally (i.e. without using HTCondor for parallelization).')
         sub.check_call(['python3','utils/condor/raw2h5.py',file_to_convert,str(add_beams),str(dot_products),str(double_precision)])
+        return
     
     timer_start = time.time()
     # Split the file to be converted into multiple
