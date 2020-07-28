@@ -75,7 +75,7 @@ With the data files ready to be read into the network, it's time for training! T
 - Clone the git repository to the machine where the network will be trained.
     ```
     cd [project folder]
-    git clone git@github.com:fizisist/NBodyJetNets.git
+    git clone git@github.com:fizisist/LorentzGroupNetwork.git
     ```
 - Create a conda environment for this project, and install pytorch, torchvision and cudatoolkit:
     ```
@@ -86,7 +86,7 @@ With the data files ready to be read into the network, it's time for training! T
     The version of cudatoolkit may depend on the GPU's being used.
 - Install LGN
     ```
-    cd [project folder]/NBodyJetNets/NetworkDesign/
+    cd [project folder]/LorentzGroupNetwork/NetworkDesign/
     pip install -e .
     ```
 - Check which GPU's are available, and select one to use for training.
