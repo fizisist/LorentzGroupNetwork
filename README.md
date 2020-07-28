@@ -70,7 +70,7 @@ Here, the first argument is the path to the directory containing the *unconverte
 
 ##### 2) Training the network
 
-With the data files ready to be read into the network, it's time for training! The process of setting up training is outlined in `/NetworkDesign/Lambda_Instructions.rst`. Some of steps are specific to logging into one of our clusters, `Lambda`, but the instructions are general to all machines capable of setting up conda & using CUDA. For completeness, here is an outline of the instructions:
+With the data files ready to be read into the network, it's time for training! Some of steps are specific to logging into one of our clusters, `Lambda`, but the instructions are general to all machines capable of setting up conda & using CUDA. For completeness, here is an outline of the instructions:
 
 - Clone the git repository to the machine where the network will be trained.
     ```
@@ -86,7 +86,7 @@ With the data files ready to be read into the network, it's time for training! T
     The version of cudatoolkit may depend on the GPU's being used.
 - Install LGN
     ```
-    cd [project folder]/LorentzGroupNetwork/NetworkDesign/
+    cd [project folder]/LorentzGroupNetwork/
     pip install -e .
     ```
 - Check which GPU's are available, and select one to use for training.
