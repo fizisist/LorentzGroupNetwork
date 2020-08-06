@@ -36,7 +36,7 @@ def main(args):
     # This may be slower (& memory-intensive, in the case of dot_products = 1), but necessary
     # if the user does not have condor set up.
     
-    if(ndivisions = -1):
+    if(ndivisions == -1):
         print('Performing conversion locally (i.e. without using HTCondor for parallelization).')
         sub.check_call(['python3','utils/condor/raw2h5.py',file_to_convert,str(add_beams),str(dot_products),str(double_precision)])
         return
