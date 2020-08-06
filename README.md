@@ -62,7 +62,7 @@ First, we need to convert the dataset files into a format that our network's dat
 
 In the case of the top-tagging dataset, this conversion is very lightweight: The dataset, like the format our network uses, stores jet constituents as lists of momentum 4-vectors in Cartesian format `(E, px, py, pz)`, where the z-axis corresponds with the beamline. All we need to do is copy the data from a pandas `DataFrame` (saved in an HDF5 file) to a new HDF5 file written using h5py.
 
-To accomplish this, we will use the script at `/DataSamples/toptag/conversion/raw2h5/convert.py`. This script makes use of HTCondor to parallelize the conversion process and speed things up -- it can also be run without HTCondor, in which case the conversion process will not be parallelized. The script can be run as follows:
+To accomplish this, we will use the script at `/data/toptag/conversion/raw2h5/convert.py`. This script makes use of HTCondor to parallelize the conversion process and speed things up -- it can also be run without HTCondor, in which case the conversion process will not be parallelized. The script can be run as follows:
 ```
 python3 convert.py /path/to/dir/with/data/files njobs
 ```
