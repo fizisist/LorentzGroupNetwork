@@ -3,11 +3,13 @@
 # Goal: Draw the histograms created from the toptag dataset.
 #       (Pythonized & updated version of "present.C")
 
-import ROOT as rt, numpy as np, sys
+import ROOT as rt, numpy as np, subprocess as sub, sys, os
 
 # Helper function for making TPaveText
-def SetupPave(x1, y1, x2, y2):
-    pave = rt.TPaveText(x1,y1,x2,y2, 'NDC')
+def SetupPave(x1, y1, x2, y2, NDC = True):
+    option = 'NDC'
+    if(not NDC): option = ''
+    pave = rt.TPaveText(x1,y1,x2,y2, option)
     pave.SetTextFont(42)
     pave.SetTextAngle(0)
     pave.SetTextColor(rt.kBlack)
@@ -50,31 +52,62 @@ def PlotAdjust(histogram, ranges, title = '', scientific = False):
             axes[i].SetMaxDigits(3)
     return
 
-def PlotDisplay(c, plots, leg, pave, log = True, d2 = False, errors = False):
+def PlotDisplay(c, plots, leg, paves, log = True, d2 = False, d3 = False, errors = False, option = ''):
     nplots = len(plots)
     c.cd()
-    option = ''
-    if(d2):
-        option = 'COLZ'
-        c.SetRightMargin(0.125) # leave space for colorbar labels (sufficient for log scale)
-    if(errors): option = 'HIST E1'
+    if(option == ''):
+        if(d2): option = 'COLZ'
+        if(d3): option = 'SURF7'
+        if(errors): option = 'HIST E1'
+        
+    if(option == 'COLZ'): c.SetRightMargin(0.125) # leave space for colorbar labels (sufficient for log scale)
+    
+    if('CANDLE' in option and nplots == 2): # TODO: Quick hack for box and whisker plot. Maybe make this nicer?
+        plots[0].SetBarWidth(0.3)
+        plots[0].SetBarOffset(-0.20)
+        plots[1].SetBarWidth(0.3)
+        plots[1].SetBarOffset(0.20)
+
+    # Draw the last plot in the list. (by convention, this is the background plot)
+    if('SURF' in option and nplots == 2): rt.gStyle.SetPalette(rt.kCherry)
     plots[-1].Draw(option)
+    if('SURF' in option and nplots == 2): rt.gStyle.SetPalette(rt.kDeepSea)
+
     for i in range(nplots-2,-1,-1):
         if(option == ''): option = 'SAME'
-        else: option += ' SAME' # TODO: Space seems to matter!
+        else: option += ' SAME'
         plots[i].Draw(option)
+    
     if(leg != 0): leg.Draw()
-    pave.Draw()
+    
+    for pave in paves: pave.Draw()
+    
     if(log):
-        if(d2): c.SetLogz()
+        if(d2 or d3): c.SetLogz()
         else: c.SetLogy()
+        
+    # if using linear scale with 2D/3D plot, adjust maximum cleverly TODO: Do this for all plots?
+    if(not log and (d2 or d3)):
+        max = plots[-1].GetBinContent(plots[-1].GetMaximumBin())
+        max_order = np.floor(np.log10(max))
+        max_order = np.power(10, max_order)
+        max = np.ceil(max/max_order) * max_order
+        plots[-1].GetZaxis().SetRangeUser(0.,max)
+    
+    # reduce font sizes for 3D plots (those using SURF option)
+    if(d3):
+        label_scale = 0.5
+        plots[-1].GetXaxis().SetLabelSize(label_scale * plots[-1].GetXaxis().GetLabelSize())
+        plots[-1].GetYaxis().SetLabelSize(label_scale * plots[-1].GetYaxis().GetLabelSize())
+        plots[-1].GetZaxis().SetLabelSize(label_scale * plots[-1].GetZaxis().GetLabelSize())
+    
     c.Draw()
     c.Update()
     return
 
-def CanvasSave(c, prefix, f, suffixes = ['.eps','.png','.pdf']):
+def CanvasSave(c, prefix, f, suffixes = ['png','eps','pdf']):
     for suffix in suffixes:
-        c.SaveAs(prefix + suffix)
+        c.SaveAs(prefix + '.' + suffix)
     f.cd()
     c.Write('',rt.TObject.kOverwrite)
     return
@@ -97,9 +130,31 @@ def AvgNx(f, X, suffixes, transverse = False):
             nx_avg_hists[y].SetBinError(idx, stderr[y,idx])
     return nx_avg_hists
 
+def GetXYLine(plot_range):
+    x1 = plot_range[0][0]
+    y1 = plot_range[1][0]
+    x2 = plot_range[0][1]
+    y2 = plot_range[1][1]
+    if(y1 > x1): x1 = y1
+    else: y1 = x1
+    if(y2 > x2): y2 = x2
+    else: x2 = y2
+    line = rt.TLine(x1,y1,x2,y2)
+    line.SetLineColor(rt.kRed)
+    line.SetLineWidth(2)
+    line.SetLineStyle(9)
+    return line
+
 def main(args):
-    if(len(sys.argv) > 1 ): filename = str(sys.argv[1])
+    if(len(sys.argv) > 1): filename = str(sys.argv[1])
     else: filename = 'toptag.root'
+    
+    if(len(sys.argv) > 2): cut = str(sys.argv[2])
+    else: cut = ''
+    
+    # Some shorthand options for cuts
+#    if(cut == 'mj'): cut = 'm_{j}#in(m_{top}- 50[GeV], m_{top}+ 50[GeV])'
+    if(cut == 'mj'): cut = 'm_{j}#in(m_{top}#pm 50[GeV])'
     
     # QoL options
     rt.gROOT.SetBatch(True)
@@ -115,57 +170,57 @@ def main(args):
     rt.gStyle.SetEndErrorSize(2.)
     
     f = rt.TFile(filename,'READ')
-    suffixes = ['bck','sig']
-    
+    suffixes = ['sig','bck']
+    suffixes2 = ['sig_bck','all'] # for some vars, we have sig & background series, and combined series
+    colors = {suffixes[0] : rt.kBlue, suffixes[1] : rt.kRed}
+
     # Jet histograms
     pt_j = [f.Get('pt_j_hist_'+x) for x in suffixes]
-    pt_j[0].SetLineColor(rt.kRed)
-    pt_j[1].SetLineColor(rt.kBlue)
+    [pt_j[x].SetLineColor(colors[suffixes[x]]) for x in range(2)]
     
     eta_j = [f.Get('eta_j_hist_'+x) for x in suffixes]
-    eta_j[0].SetLineColor(rt.kRed)
-    eta_j[1].SetLineColor(rt.kBlue)
-    
+    [eta_j[x].SetLineColor(colors[suffixes[x]]) for x in range(2)]
+
     phi_j = [f.Get('phi_j_hist_'+x) for x in suffixes]
-    phi_j[0].SetLineColor(rt.kRed)
-    phi_j[1].SetLineColor(rt.kBlue)
-    
+    [phi_j[x].SetLineColor(colors[suffixes[x]]) for x in range(2)]
+
     et_j = [f.Get('et_j_hist_'+x) for x in suffixes]
-    et_j[0].SetLineColor(rt.kRed)
-    et_j[1].SetLineColor(rt.kBlue)
-    
+    [et_j[x].SetLineColor(colors[suffixes[x]]) for x in range(2)]
+
     m_j = [f.Get('m_j_hist_'+x) for x in suffixes]
-    m_j[0].SetLineColor(rt.kRed)
-    m_j[1].SetLineColor(rt.kBlue)
-    
+    [m_j[x].SetLineColor(colors[suffixes[x]]) for x in range(2)]
+
     nobj = [f.Get('n_hist_'+x) for x in suffixes]
-    nobj[0].SetLineColor(rt.kRed)
-    nobj[1].SetLineColor(rt.kBlue)
-    
+    [nobj[x].SetLineColor(colors[suffixes[x]]) for x in range(2)]
+
     X = np.linspace(0,100,21,dtype=np.dtype('i8')) #TODO: This must match the array in plotting_h5.py
     nx_e = [{x: f.Get('n'+str(x)+'_e_hist_'+y) for x in X} for y in suffixes]
-    [nx_e[0][x].SetLineColor(rt.kRed) for x in X]
-    [nx_e[1][x].SetLineColor(rt.kBlue) for x in X]
+    [[nx_e[y][x].SetLineColor(colors[suffixes[y]]) for y in range(2)] for x in X]
+
     nx_et = [{x: f.Get('n'+str(x)+'_et_hist_'+y) for x in X} for y in suffixes]
-    [nx_et[0][x].SetLineColor(rt.kRed) for x in X]
-    [nx_et[1][x].SetLineColor(rt.kBlue) for x in X]
+    [[nx_et[y][x].SetLineColor(colors[suffixes[y]]) for y in range(2)] for x in X]
 
     # Make the average Nx distributions, using the Nx distributions above
     nx_e_avg = AvgNx(f,X, suffixes, False)
-    nx_e_avg[0].SetLineColor(rt.kRed)
-    nx_e_avg[0].SetMarkerColor(rt.kRed)
-    nx_e_avg[1].SetLineColor(rt.kBlue)
-    nx_e_avg[1].SetMarkerColor(rt.kBlue)
+    [nx_e_avg[x].SetLineColor(colors[suffixes[x]]) for x in range(2)]
+    [nx_e_avg[x].SetMarkerColor(colors[suffixes[x]]) for x in range(2)]
     
     nx_et_avg = AvgNx(f,X, suffixes, True)
-    nx_et_avg[0].SetLineColor(rt.kRed)
-    nx_et_avg[0].SetMarkerColor(rt.kRed)
-    nx_et_avg[1].SetLineColor(rt.kBlue)
-    nx_et_avg[1].SetMarkerColor(rt.kBlue)
+    [nx_et_avg[x].SetLineColor(colors[suffixes[x]]) for x in range(2)]
+    [nx_et_avg[x].SetMarkerColor(colors[suffixes[x]]) for x in range(2)]
     # --------------------
     
-    # N vs m_j histogram
-    n_m = f.Get('n_m_hist')
+    # For 2D histograms with separate signal/background, also make a combo
+    n_m  = [f.Get('n_m_hist_'+x)  for x in suffixes] # N vs m_j histograms
+    n_pt = [f.Get('n_pt_hist_'+x) for x in suffixes] # N vs pt_reco histograms
+    n_m.append(n_m[1].Clone('n_m_hist_all'))
+    n_m[-1].Add(n_m[0])
+    n_pt.append(n_pt[1].Clone('n_pt_hist_all'))
+    n_pt[-1].Add(n_pt[0])
+    [n_m[x].SetLineColor(colors[suffixes[x]]) for x in range(2)]
+    [n_pt[x].SetLineColor(colors[suffixes[x]]) for x in range(2)]
+
+    n_TpT = f.Get('n_TpT_hist') # N vs pt_true histogram
     
     # Jet energy scale & other signal-only histograms
     jes = f.Get('jes_hist')
@@ -184,32 +239,41 @@ def main(args):
     # --------------------
     
     # Legend for use by all histograms, without markers
-    leg = SetupLegend(0.65,0.775,0.9,0.9)
+    leg_x1 = 0.65
+    leg_x2 = 0.9
+    leg_y1 = 0.775
+    leg_y2 = 0.9
+    leg = SetupLegend(leg_x1, leg_y1, leg_x2, leg_y2)
     leg.SetHeader("anti-k_{T}, R = 0.8")
-    leg.AddEntry(pt_j[1],"Hadronic top decays","l")
-    leg.AddEntry(pt_j[0],"Light quarks and gluons","l")
+    leg.AddEntry(pt_j[0],"Hadronic top decays","l")
+    leg.AddEntry(pt_j[1],"Light quarks and gluons","l")
     
-#    # Legend for use by all histograms, with markers
-#    leg2 = SetupLegend(0.5,0.725,0.9,0.9)
-#    leg2.SetHeader("anti-k_{T}, R = 0.8")
-#    leg2.AddEntry(nx_avg[1],"Hadronic top decays","p")
-#    leg2.AddEntry(nx_avg[0],"Light quarks and gluons","p")
-    
+    paves = []
     # Textbox with information on the dataset
     pave = SetupPave(0.2, 1. - rt.gStyle.GetPadTopMargin(), 1. - rt.gStyle.GetPadRightMargin(),1.)
     pave.SetTextColor(rt.kGray + 2)
     pave.SetTextFont(12) # times-medium-i-normal w/ precision = 2 (scalable & rotatable hardware font)
     pave.SetTextSize(0.04)
-    pave.AddText("Top tagging reference dataset (https://zenodo.org/record/2603256)")
+    pave.AddText('Top tagging reference dataset (https://zenodo.org/record/2603256)')
+    paves.append(pave)
+    
+    # Optional textbox with cut information (none if there's not cut
+    pave2 = 0
+    if(cut != ''):
+        pave2 = SetupPave(0.1, 0., 1. - rt.gStyle.GetPadRightMargin(),rt.gStyle.GetPadBottomMargin())
+        pave2.SetTextColor(rt.kViolet + 3)
+        pave2.SetTextFont(12) # times-medium-i-normal w/ precision = 2 (scalable & rotatable hardware font)
+        pave2.SetTextSize(0.03)
+        pave2.AddText(cut)
+        paves.append(pave2)
     
     # --- Some beautification of plots for display ---
-    
     ranges = {}
     ranges['pt'] = ((5.e2,7.e2),(1.e0,1.e7))
     ranges['eta'] = ((-2.5,2.5),(1.e0,1.e6))
     ranges['phi'] = ((-4.,4.),(1.e0,1.e6))
     ranges['et'] = ((5.e2,8.e2),(1.e0,1.e6))
-    ranges['m'] = ((0.,1000.),(1.e0,1.e6))
+    ranges['m'] = ((0.,400.),(1.e0,1.e6))
     ranges['n'] = ((0.,202.),(1.,5.e4))
     ranges['nx'] = ((0.,200.),(0.,1.e2))
     ranges['jes'] = ((-1.,1.),(1.,2.e5))
@@ -221,32 +285,35 @@ def main(args):
     ranges['jps_TpT'] = (ranges['TpT'][0],(-1.,1.),(0.,1.e5))
     ranges['RpT_TpT'] = (ranges['TpT'][0],ranges['pt'][0],(0.,1.e5))
     ranges['n_m'] = (ranges['m'][0],ranges['n'][0],(0.,1.e5))
+    ranges['n_pt'] = (ranges['pt'][0],ranges['n'][0], (0.,1.e5))
+    ranges['n_TpT'] = (ranges['TpT'][0],ranges['n'][0], (0.,1.e5))
 
-    
     [PlotAdjust(pt_j[x], ranges['pt'], ";p_{T} [GeV];Number of jets per 10 GeV") for x in range(2)]
     [PlotAdjust(eta_j[x], ranges['eta'], ";#eta;Number of jets per bin") for x in range(2)]
     [PlotAdjust(phi_j[x], ranges['phi'], ";#phi;Number of jets per bin") for x in range(2)]
     [PlotAdjust(et_j[x], ranges['et'], ";E_{T} [GeV];Number of jets per 10 GeV") for x in range(2)]
-    [PlotAdjust(m_j[x], ranges['m'], ";m [GeV];Number of jets per 5 GeV") for x in range(2)]
+    [PlotAdjust(m_j[x], ranges['m'], ";m_{j} [GeV];Number of jets per 5 GeV") for x in range(2)]
     [PlotAdjust(nobj[x], ranges['n'], ";N_{particles};Number of jets per bin",True) for x in range(2)]
     [PlotAdjust(nx_e_avg[x], ranges['nx'], ";x (%);#bar{N^{x}_{E}}",True) for x in range(2)]
     [PlotAdjust(nx_et_avg[x], ranges['nx'], ";x (%);#bar{N^{x}_{E_{T}}}",True) for x in range(2)]
+    [PlotAdjust(n_m[x], ranges['n_m'], ";m_{j} [GeV];N_{particles}") for x in range(3)] # Note loop over 3 entries
+    [PlotAdjust(n_pt[x], ranges['n_pt'], ";p_{T}^{reco} [GeV];N_{particles}") for x in range(3)] # Note loop over 3 entries
+    
     for x in X:
         [PlotAdjust(nx_e[y][x], ranges['n'], ";N^{" + str(x) + "}_{E};Number of jets per bin",True) for y in range(2)]
         [PlotAdjust(nx_et[y][x], ranges['n'], ";N^{" + str(x) + "}_{E_{T}};Number of jets per bin",True) for y in range(2)]
-
     
-    PlotAdjust(n_m, ranges['n_m'], ";m_{j} (truth);N_{particles}")
-
-    PlotAdjust(TET, ranges['TET'], ";E_{T} (truth) [GeV];Number of top quarks per 10 GeV")
+    PlotAdjust(n_TpT, ranges['n_TpT'], ";p_{T}^{truth} [GeV];N_{particles}")
+    
+    PlotAdjust(TET, ranges['TET'], ";E_{T}^{truth} [GeV];Number of top quarks per 10 GeV")
     PlotAdjust(jes, ranges['jes'], ";JES - 1;Number of jets per bin")
-    PlotAdjust(jes_TET, ranges['jes_TET'], ";E_{T} (truth) [GeV];JES - 1")
-    PlotAdjust(RET_TET, ranges['RET_TET'], ";E_{T} (truth) [GeV];E_{T} (reco) [GeV]")
+    PlotAdjust(jes_TET, ranges['jes_TET'], ";E_{T}^{truth} [GeV];JES - 1")
+    PlotAdjust(RET_TET, ranges['RET_TET'], ";E_{T}^{truth} [GeV];E_{T}^{reco} [GeV]")
     
     PlotAdjust(TpT, ranges['TpT'], ";p_{T} (truth) [GeV];Number of top quarks per 10 GeV")
     PlotAdjust(jps, ranges['jps'], ";JpS - 1;Number of jets per bin")
-    PlotAdjust(jps_TpT, ranges['jps_TpT'], ";p_{T} (truth) [GeV];JpS - 1")
-    PlotAdjust(RpT_TpT, ranges['RpT_TpT'], ";p_{T} (truth) [GeV];p_{T} (reco) [GeV]")
+    PlotAdjust(jps_TpT, ranges['jps_TpT'], ";p_{T}^{truth} [GeV];JpS - 1")
+    PlotAdjust(RpT_TpT, ranges['RpT_TpT'], ";p_{T}^{truth} [GeV];p_{T}^{reco} [GeV]")
 
     # Draw plots
     canvas_dims = [800,600]
@@ -262,8 +329,15 @@ def main(args):
     c_nx_e = [rt.TCanvas('c_nx_e_'+str(x),'c_nx_e_'+str(x),canvas_dims[0],canvas_dims[1]) for x in X]
     c_nx_et = [rt.TCanvas('c_nx_et_'+str(x),'c_nx_et_'+str(x),canvas_dims[0],canvas_dims[1]) for x in X]
 
-    c_n_m = rt.TCanvas('c_n_m','c_n_m',canvas_dims[0],canvas_dims[1])
+    # 2D histograms
+    c_n_m = [rt.TCanvas('c_n_m_'+x,'c_n_m_'+x,canvas_dims[0],canvas_dims[1]) for x in suffixes2]
+    c_n_pt = [rt.TCanvas('c_n_pt_'+x,'c_n_pt_'+x,canvas_dims[0],canvas_dims[1]) for x in suffixes2]
+    c_n_TpT = rt.TCanvas('c_n_TpT','c_n_TpT',canvas_dims[0],canvas_dims[1])
     
+    c_n_m_3d = rt.TCanvas('c_n_m_3d','c_n_m_3d',canvas_dims[0],canvas_dims[1])
+    c_n_pt_3d = rt.TCanvas('c_n_pt_3d','c_n_pt_3d',canvas_dims[0],canvas_dims[1])
+    c_n_TpT_3d = rt.TCanvas('c_n_TpT_3d','c_n_TpT_3d',canvas_dims[0],canvas_dims[1])
+
     c_TET = rt.TCanvas('c_TET','c_TET',canvas_dims[0],canvas_dims[1])
     c_jes = rt.TCanvas('c_jes','c_jes',canvas_dims[0],canvas_dims[1])
     c_jes_TET = rt.TCanvas('c_jes_TET','c_jes_TET',canvas_dims[0],canvas_dims[1])
@@ -274,55 +348,101 @@ def main(args):
     c_jps_TpT = rt.TCanvas('c_jps_TpT','c_jps_TpT',canvas_dims[0],canvas_dims[1])
     c_RpT_TpT = rt.TCanvas('c_RpT_TpT','c_RpT_TpT',canvas_dims[0],canvas_dims[1])
     
-    PlotDisplay(c_pt, pt_j, leg, pave)
-    PlotDisplay(c_eta, eta_j, leg, pave)
-    PlotDisplay(c_phi, phi_j, leg, pave)
-    PlotDisplay(c_et, et_j, leg, pave)
-    PlotDisplay(c_m, m_j, leg, pave)
-    PlotDisplay(c_n, nobj, leg, pave, True)
-    PlotDisplay(c_nx_e_avg, nx_e_avg, leg, pave, False, False, True)
-    PlotDisplay(c_nx_et_avg, nx_et_avg, leg, pave, False, False, True)
+    PlotDisplay(c_pt, pt_j, leg, paves)
+    PlotDisplay(c_eta, eta_j, leg, paves)
+    PlotDisplay(c_phi, phi_j, leg, paves)
+    PlotDisplay(c_et, et_j, leg, paves)
+    PlotDisplay(c_m, m_j, leg, paves)
+    PlotDisplay(c_n, nobj, leg, paves, True)
+    PlotDisplay(c_nx_e_avg, nx_e_avg, leg, paves, False, False, False, True)
+    PlotDisplay(c_nx_et_avg, nx_et_avg, leg, paves, False, False, False, True)
 
-    PlotDisplay(c_n_m, [n_m], 0, pave, True, True)
+    # 2D histograms -- for 2D representations of n vs. m and n vs. pt, we use candle plots for separating signal and background
+    draw_options = ['CANDLEX3','COLZ']
+    PlotDisplay(c_n_m[0], n_m[:2], leg, paves, True, True, False, False, draw_options[0])
+    PlotDisplay(c_n_m[1], [n_m[2]], 0, paves, True, True, False, False, draw_options[1])
+    PlotDisplay(c_n_pt[0], n_pt[:2], leg, paves, True, True, False, False, draw_options[0])
+    PlotDisplay(c_n_pt[1], [n_pt[2]], 0, paves, True, True, False, False, draw_options[1])
+    PlotDisplay(c_n_TpT, [n_TpT], 0, paves, True, True)
+    
+    PlotDisplay(c_n_m_3d, [n_m[2]], 0, paves, False, False, True)
+    PlotDisplay(c_n_pt_3d, [n_pt[2]], 0, paves, False, False, True)
+    PlotDisplay(c_n_TpT_3d, [n_TpT], 0, paves, False, False, True)
 
-    PlotDisplay(c_TET, [TET], 0, pave)
-    PlotDisplay(c_jes, [jes], 0, pave)
-    PlotDisplay(c_jes_TET, [jes_TET], 0, pave, True, True)
-    PlotDisplay(c_RET_TET, [RET_TET], 0, pave, True, True)
-    PlotDisplay(c_TpT, [TpT], 0, pave)
-    PlotDisplay(c_jps, [jps], 0, pave)
-    PlotDisplay(c_jps_TpT, [jps_TpT], 0, pave, True, True)
-    PlotDisplay(c_RpT_TpT, [RpT_TpT], 0, pave, True, True)
+    PlotDisplay(c_TET, [TET], 0, paves)
+    PlotDisplay(c_jes, [jes], 0, paves)
+    PlotDisplay(c_jes_TET, [jes_TET], 0, paves, True, True)
+    PlotDisplay(c_RET_TET, [RET_TET], 0, paves, True, True)
+    PlotDisplay(c_TpT, [TpT], 0, paves)
+    PlotDisplay(c_jps, [jps], 0, paves)
+    PlotDisplay(c_jps_TpT, [jps_TpT], 0, paves, True, True)
+    PlotDisplay(c_RpT_TpT, [RpT_TpT], 0, paves, True, True)
+    
+    # get y=x line on the RpT_TpT plot
+    line = GetXYLine(ranges['RpT_TpT'])
+    c_RpT_TpT.cd()
+    line.Draw()
+    # label the line
+    offset = 0.95
+    label_x = offset * line.GetX2()
+    label_y = offset * line.GetY2()
+    label_scale_x = 200.
+    label_scale_y = 20.
+    line_label = SetupPave(1.05 * label_x,label_y, label_x + label_scale_x, label_y + label_scale_y, False)
+    line_label.SetTextColor(rt.kRed)
+    line_label.AddText('p_{T, reco} = p_{T, truth}')
+    line_label.Draw()
 
     nx_range = range(len(X)-3, len(X))
-
-    [PlotDisplay(c_nx_e[idx], [nx_e[0][X[idx]],nx_e[1][X[idx]]], leg, pave, True) for idx in nx_range]
-    [PlotDisplay(c_nx_et[idx], [nx_et[0][X[idx]],nx_et[1][X[idx]]], leg, pave, True) for idx in nx_range]
+    [PlotDisplay(c_nx_e[idx], [nx_e[0][X[idx]],nx_e[1][X[idx]]], leg, paves, True) for idx in nx_range]
+    [PlotDisplay(c_nx_et[idx], [nx_et[0][X[idx]],nx_et[1][X[idx]]], leg, paves, True) for idx in nx_range]
 
     g = rt.TFile('plots.root', 'RECREATE')
-    CanvasSave(c_pt, 'pt_reco', g)
-    CanvasSave(c_eta, 'eta_reco', g)
-    CanvasSave(c_phi, 'phi_reco', g)
-    CanvasSave(c_et, 'et_reco', g)
-    CanvasSave(c_m, 'm_reco', g)
-    CanvasSave(c_n, 'n', g)
-    CanvasSave(c_nx_e_avg, 'nx_e_avg', g)
-    CanvasSave(c_nx_et_avg, 'nx_et_avg', g)
-    CanvasSave(c_n_m, 'n_m', g)
-    CanvasSave(c_TET, 'et_truth', g)
-    CanvasSave(c_jes, 'jes-1', g)
-    CanvasSave(c_jes_TET, 'jes-1_et_truth', g)
-    CanvasSave(c_RET_TET, 'et_reco_et_truth', g)
-    CanvasSave(c_TpT, 'pt_truth', g)
-    CanvasSave(c_jps, 'jps-1', g)
-    CanvasSave(c_jps_TpT, 'jps-1_pt_truth', g)
-    CanvasSave(c_RpT_TpT, 'pt_reco_pt_truth', g)
+    file_suffixes = ['png','eps','pdf']
     
-    [CanvasSave(c_nx_e[idx], 'n_e_'+str(int(X[idx])), g) for idx in nx_range]
-    [CanvasSave(c_nx_et[idx], 'n_et_'+str(int(X[idx])), g) for idx in nx_range]
+    CanvasSave(c_pt, 'pt_reco', g, file_suffixes)
+    CanvasSave(c_eta, 'eta_reco', g, file_suffixes)
+    CanvasSave(c_phi, 'phi_reco', g, file_suffixes)
+    CanvasSave(c_et, 'et_reco', g, file_suffixes)
+    CanvasSave(c_m, 'm_reco', g, file_suffixes)
+    
+    # Save log & linear version of the n plot
+    CanvasSave(c_n, 'n_log', g, file_suffixes)
+    c_n.SetLogy(0)
+    CanvasSave(c_n, 'n', g, file_suffixes)
+    
+    CanvasSave(c_nx_e_avg, 'nx_e_avg', g, file_suffixes)
+    CanvasSave(c_nx_et_avg, 'nx_et_avg', g, file_suffixes)
+    
+    [CanvasSave(c_n_m[x], 'n_m_'+suffixes2[x], g, file_suffixes) for x in range(2)]
+    [CanvasSave(c_n_pt[x], 'n_pt_'+suffixes2[x], g, file_suffixes) for x in range(2)]
+    CanvasSave(c_n_TpT, 'n_TpT', g, file_suffixes)
+    
+    CanvasSave(c_n_m_3d, 'n_m_3d', g, file_suffixes)
+    CanvasSave(c_n_pt_3d, 'n_pt_3d', g, file_suffixes)
+    CanvasSave(c_n_TpT_3d, 'n_TpT_3d', g, file_suffixes)
+    
+    CanvasSave(c_TET, 'et_truth', g, file_suffixes)
+    CanvasSave(c_jes, 'jes-1', g, file_suffixes)
+    CanvasSave(c_jes_TET, 'jes-1_et_truth', g, file_suffixes)
+    CanvasSave(c_RET_TET, 'et_reco_et_truth', g, file_suffixes)
+    CanvasSave(c_TpT, 'pt_truth', g, file_suffixes)
+    CanvasSave(c_jps, 'jps-1', g, file_suffixes)
+    CanvasSave(c_jps_TpT, 'jps-1_pt_truth', g, file_suffixes)
+    CanvasSave(c_RpT_TpT, 'pt_reco_pt_truth', g, file_suffixes)
+    
+    [CanvasSave(c_nx_e[idx], 'n_e_'+str(int(X[idx])), g, file_suffixes) for idx in nx_range]
+    [CanvasSave(c_nx_et[idx], 'n_et_'+str(int(X[idx])), g, file_suffixes) for idx in nx_range]
 
     g.Close()
     f.Close()
+    
+    # place the plots in subdirectories based on filetype
+    for suffix in file_suffixes:
+        try: os.makedirs(suffix)
+        except: pass
+        sub.check_call('mv *.' + suffix + ' ' + suffix + '/', shell=True)
+    
     return
 
 if __name__ == '__main__':

@@ -9,4 +9,4 @@ lsetup "lcgenv -p LCG_96python3 x86_64-slc6-gcc8-opt Python" "lcgenv -p LCG_96py
 
 # do the conversion!
 echo 'Converting files.'
-python plotting_h5.py $1
+python plotting_h5.py $1 $2

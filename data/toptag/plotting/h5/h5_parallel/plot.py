@@ -11,11 +11,13 @@ def main(args):
     file_dir = str(sys.argv[1]) # converted toptag h5 file directory
     files = glob.glob(file_dir + '/*.h5')
     ndivisions = int(sys.argv[2]) # number of Condor workers to use for plotting
+    cut_type = ''
     do_split = 1
     do_condor = 1
     
-    if(len(sys.argv) > 3): do_split = int(sys.argv[3])
-    if(len(sys.argv) > 4): do_condor = int(sys.argv[4])
+    if(len(sys.argv) > 3): cut_type = str(sys.argv[3])
+    if(len(sys.argv) > 4): do_split = int(sys.argv[4])
+    if(len(sys.argv) > 5): do_condor = int(sys.argv[5])
 
     # Split the files to be converted into multiple
     # chunks, each in its own folder. These will
@@ -35,6 +37,7 @@ def main(args):
             text = f.readlines()
         with open('plot.sub', 'w') as f:
             for line in text:
+                line = line.replace('$CUT', cut_type)
                 line = line.replace('$FILENAMES', files)
                 line = line.replace('$NJOBS', str(ndivisions))
                 f.write(line)
