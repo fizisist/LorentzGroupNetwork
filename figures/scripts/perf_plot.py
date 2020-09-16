@@ -28,8 +28,8 @@ key_conversion = {
 axis_range = { #y_min, y_max, ndivisions
 'loss': (15,25,10),
 'acc': (90,95,10), #(90,95,5)
-'auc': (84,100,8),
-'rej': (0,600,12)
+'auc': (76,100,12),
+'rej': (0,800,16)
 }
 
 # Sort lists alphanumerically
@@ -119,9 +119,9 @@ def GetAvgData(run_folders, nepochs = 10, type_key='train'):
             if (data[j][i+1] != 'MISSING'): epoch_data.append(np.array(data[j][i+1],dtype=np.dtype('f8')))
         nruns_epoch = float(len(epoch_data)) # may be shorter than nruns if data is missing
         avg = np.sum(np.array(epoch_data),axis=0) / nruns_epoch
-        stdev = np.std(np.array(epoch_data),axis=0)
+        stdev = np.std(np.array(epoch_data),axis=0,ddof=1) # ddof=1 since this is the corrected *sample* standard deviation (Bessel's correction)
         stderr = stdev / np.sqrt(nruns_epoch)
-        avg_data[i+1] = (avg,stdev) # TODO: Here we can use either stdev (current choice) or stderr
+        avg_data[i+1] = (avg,stderr)
     return [type_key, avg_data, nepochs]
 
   # Make plots for of {loss, ACC, AUC, rejection} for each run listed in data_list, with all listed runs on the same axis.
@@ -200,13 +200,15 @@ def Plot(data_list,key, savedir = '', title = '', overwrite = False):
     plt.xlabel('Epoch')
     plt.ylabel(key_conversion[key][1])
     plt.title(title + ': ' + type_key)
-#    plt.legend(loc='upper left', prop={'size': 12})
+    # adjust number of columns in the legend, based on number of entries
+    ndata = len(data_list)
+    ncol = int(np.ceil(ndata/6))
     if(key in ['acc','rej']):
-        plt.legend(loc='upper left', prop={'size': 12})
+        plt.legend(loc='upper left', prop={'size': 12}, ncol=ncol)
     elif(key in ['loss']):
-        plt.legend(loc='lower left', prop={'size': 12})
+        plt.legend(loc='lower left', prop={'size': 12}, ncol=ncol)
     else:
-        plt.legend(loc='lower right', prop={'size': 12})
+        plt.legend(loc='lower right', prop={'size': 12}, ncol=ncol)
     fig.tight_layout() # get rid of excess margins in image
     
     #5) ROOT post
@@ -477,9 +479,7 @@ def main(args):
 
 if __name__ == '__main__':
     main(sys.argv)
-
     
-
 ## Make individual plots for the average {loss, ACC, AUC, rejection} for a single run (only with ROOT)
 #def Plot(data, key, savedir = '', overwrite = False):
 #    type_key = data[0]
