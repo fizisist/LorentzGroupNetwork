@@ -44,5 +44,3 @@ You may also want to save truth-level particles from each event, together with a
 
 ### Output Data Format
 TODO
-   [PlGa]: <https://github.com/RahulHP/dillinger/blob/master/plugins/googleanalytics/README.md>
-
