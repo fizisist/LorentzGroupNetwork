@@ -43,12 +43,12 @@ All these should be installed automatically when you run setup.py
 LGN is installable using pip.  You can currently install it from
 source by going to the directory with setup.py::
 
-    pip install lgn .
+    pip install .
 
 If you would like to modify the source code directly, note that LGN
 can also be installed in "development mode" using the command::
 
-    pip install lgn -e .
+    pip install -e .
 
 
 
