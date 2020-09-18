@@ -101,7 +101,7 @@ With the data files ready to be read into the network, it's time for training! S
     ```
     This last script can be passed a wide range of arguments, corresponding with hyperparameters & network configurations. For example, one may consider the following:
     ```
-    scripts/train_lormorant.py --datadir=/path/to/dir/with/converted/data/files --maxdim=3 --max-zf=1 --num-channels 2 4 4 2 --num-epoch=10 --batch-size=8 --num-cg-levels=3 --lr-init=0.001 --lr-final=0.00001 --mlp=True --pmu-in=True --nobj=126 --prefix=set8run-n128 --verbose=0
+    scripts/train_lormorant.py --datadir=/path/to/dir/with/converted/data/files --maxdim=3 --max-zf=1 --num-channels 2 4 4 2 --num-epoch=10 --batch-size=8 --num-cg-levels=3 --lr-init=0.001 --lr-final=0.00001 --mlp=True --pmu-in=True --nobj=126 --prefix=my_lgn_config --verbose=0
     ```
     - `datadir`: Directory containing the *converted* top-tagging files.
     - `maxdim`: Maximum dimensionality of tensors produced in the network.
