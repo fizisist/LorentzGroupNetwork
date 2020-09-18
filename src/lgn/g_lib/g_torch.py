@@ -1,5 +1,5 @@
 import torch
-import lgn.g_lib.rotations as rot
+from lgn.g_lib import rotations as rot
 import warnings
 
 from itertools import zip_longest
