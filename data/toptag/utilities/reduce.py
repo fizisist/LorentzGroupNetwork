@@ -38,7 +38,7 @@ def main(args):
         indices = np.argsort(signal) # sorted indices -- background (0), then signal (1)
         indices = [indices[:n_bck],indices[n_bck:]]
         [np.random.shuffle(x) for x in indices] # modifies elements
-        indices = [x[:int(0.01 * percentage * x.shape[0])] for x in indices]
+        indices = [x[:int(0.01 * percentage * float(x.shape[0]))] for x in indices]
         indices = np.append(indices[0], indices[1]) # signal & background indices together
 
         print('File = ', file)
