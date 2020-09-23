@@ -16,7 +16,7 @@ def main(args):
     min = int(sys.argv[2]) # 550
     max = int(sys.argv[3]) # 650
     step = int(sys.argv[4]) # 10
-    balance = int(sys.argv[5])
+    do_balance = int(sys.argv[5])
     if(len(sys.argv) > 6): debug = 1
     else: debug = 0
 
@@ -39,7 +39,7 @@ def main(args):
     pt_files = glob.glob(path_to_files + '/*.h5')
     pt_files = list(set(pt_files) - set(original_files))
     
-    if(balance == 0): return
+    if(do_balance == 0): return
     # Now our goal is to remove events from *training* pt slices,
     # such that each has the same number of signal and background events, with a 50/50 split.
     pt_files = [x for x in pt_files if('train' in x)]
