@@ -1,10 +1,10 @@
-Additional utilities, outside of plotting & file format conversion. All of these are to be run on the converted dataset, not the original `pandas` HDFStore file.
+Additional utilities, outside of plotting & file format conversion, to allow for manipulation of the data files (e.g. for setting up studies). All of these are to be run on the converted dataset, not the original `pandas` HDFStore file.
 
-`pt_sort.py`: Create copies of the data files, with events sorted by jet pT. (Files must contain the "jet_pt" column, added March 2020).
+`pt_sort.py`: Create copies of the data files, with events sorted by jet pT.
 
 `pt_slice.py`: Create copies of the  data files, only containing events that fall within a user-specified jet pT window.
 
-`slice.py`: Automatically run `pt_slice.py` over a range of jet pT windows. Note: Arguments are *hard-coded*.
+`slice.py`: Automatically run `pt_slice.py` over a range of jet pT windows. Then appropriately "balance" the files so that each slice has the same number of events, and they each have 50% signal and 50% background. Note: Arguments are *hard-coded*.
 
 `reduce.py`: Create copies of the data files, that only contain some % of the original events (while preserving the signal/background ratio).
 

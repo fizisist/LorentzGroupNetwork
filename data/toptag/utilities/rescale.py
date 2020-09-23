@@ -12,16 +12,16 @@ import h5py as h5, numpy as np
 def main(args):
     input_file = sys.argv[1] # file of which to make a rescaled copy
     model_file = sys.argv[2] # file to match for # of signal & background events
-    rescale(input_file, model_file)
+    copy_file = rescale(input_file, model_file)
     return
 
 def rescale(input, model):
     f_input = h5.File(input,'r')
     f_model = h5.File(model, 'r')
     
-    # Get the number of s/b events for each
-    n_input = np.array([np.sum(f_input['is_signal'][:]),f_input['is_signal'].shape[0]],dtype=np.dtype('i8'))
-    n_model = np.array([np.sum(f_model['is_signal'][:]),f_model['is_signal'].shape[0]],dtype=np.dtype('i8'))
+    # Get the number of signal & background events for each
+    n_input = np.array([np.sum(f_input['is_signal'][:]),f_input['is_signal'].shape[0]-np.sum(f_input['is_signal'][:])],dtype=np.dtype('i8'))
+    n_model = np.array([np.sum(f_model['is_signal'][:]),f_model['is_signal'].shape[0]-np.sum(f_model['is_signal'][:])],dtype=np.dtype('i8'))
     
     # At this point we can safely close f_model
     f_model.close()
@@ -51,8 +51,8 @@ def rescale(input, model):
     idxs = np.sort(np.concatenate((idxs[0],idxs[1])))
 
     # Now copy the input file, using only the index list we've gathered.
-    copy = input.replace('.h5','_rescaled.h5')
-    f_copy = h5.File(copy,'w')
+    copyname = input.replace('.h5','_rescaled.h5')
+    f_copy = h5.File(copyname,'w')
     keys = list(f_input.keys())
     
     # Note: h5py seemingly doesn't let us retrieve data using non-sequential arrays as indices,
@@ -62,12 +62,12 @@ def rescale(input, model):
     f_copy_data = {key: f_input_data[key][idxs] for key in keys}
     
     for key in keys:
-        print(key)
+        print('Writing data for key ' + str(key) + '.')
         f_copy.create_dataset(key,data=f_copy_data[key],compression = 'gzip')
     # Now close the remaining files.
     f_copy.close()
     f_input.close()
-    return
+    return copyname
     
 if __name__ == '__main__':
     main(sys.argv)
