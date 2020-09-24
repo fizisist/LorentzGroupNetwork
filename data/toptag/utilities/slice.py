@@ -40,8 +40,20 @@ def main(args):
     pt_files = list(set(pt_files) - set(original_files))
     
     if(do_balance == 0): return
-    # Now our goal is to remove events from *training* pt slices,
+    # Now our goal is to remove events from training pt slices,
     # such that each has the same number of signal and background events, with a 50/50 split.
+    # (We also want to "balance" the validation and testing pt slices to have a 50/50 split,
+    #  but each slice need not have the same number of events.)
+    
+    # First handle validation & testing.
+    val_test_pt_files = [x for x in pt_files if('test' in x or 'valid' in x)]
+    for file in val_test_pt_files:
+        balanced_file = balance(file)
+        sub.check_call(['rm',file])
+        sub.check_call(['mv',balanced_file,file])
+    
+    # Now handle training -- slightly more complicated since in addition to balancing signal and background,
+    # we are also ensuring that each training pt slice has the same number of total events.
     pt_files = [x for x in pt_files if('train' in x)]
 
     # Now we seek file with the smallest number of signal *or* background events.
@@ -80,9 +92,7 @@ def main(args):
         ns = [np.sum(x['is_signal'][:]) for x in files_h5]
         nb = [files_h5[x]['is_signal'].shape[0] - ns[x] for x in range(len(files_h5))]
         for i in range(len(files_h5)): print(pt_files[i], ns[i], nb[i])
-    
     return
 
 if __name__ == '__main__':
     main(sys.argv)
-
