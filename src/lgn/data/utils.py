@@ -17,17 +17,20 @@ def initialize_datasets(args, datadir='../../../data/samples_h5', num_pts=None):
     # There may be many data files, in some cases the test/train/validate sets may themselves be split across files.
     # We will look for the keywords defined in splits to be be in the filenames, and will thus determine what
     # set each file belongs to.
-    splits = ['train', 'test', 'valid'] # We will consider all HDF5 files in datadir with one of these keywords in the filename
+    splits = ['train', 'test', 'valid'] # Our data categories -- training set, testing set and validation set
+    patterns = {'train':'train', 'test':'test', 'valid':'val'} # Patterns to look for in data files, to identify which data category each belongs in
+    
     files = glob.glob(datadir + '/*.h5')
     datafiles = {split:[] for split in splits}
     for file in files:
-        for split in splits:
-            if split in file: datafiles[split].append(file)
+        for split,pattern in patterns.items():
+            if pattern in file: datafiles[split].append(file)
     nfiles = {split:len(datafiles[split]) for split in splits}
     
     ### ------ 2: Set the number of data points ------ ###
     # There will be a JetDataset for each file, so we divide number of data points by number of files,
-    # to get data points per file. (Integer division -> must be careful!) #TODO: nfiles > npoints might cause issues down the line, but it's an absurd use case
+    # to get data points per file. (Integer division -> must be careful!)
+    #TODO: nfiles > npoints might cause issues down the line, but it's an absurd use case
     if num_pts is None:
         num_pts={'train':args.num_train,'test':args.num_test,'valid':args.num_valid}
         

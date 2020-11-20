@@ -68,6 +68,8 @@ python3 convert.py /path/to/dir/with/data/files njobs
 ```
 Here, the first argument is the path to the directory containing the *unconverted* top-tagging files. The second argument (`njobs`) is the number of jobs to submit to HTCondor. *If not using Condor*, this should be set to `-1`.
 
+**Note**: When training the network, loading the data will be handled by the script at `/src/lgn/data/utils.py`. This handles organizing the input data files into training, testing and validation samples. These are determined by matching the patterns `train*.h5`, `test*.h5`, and `val*.h5`, respectively. One must have at least one file matching each of these patterns (otherwise one of these samples will be missing!), and files in the data directory you specify that do not match any of these patterns will be ignored.
+
 ##### 2) Training the network
 
 With the data files ready to be read into the network, it's time for training! Some of steps are specific to logging into one of our clusters, `Lambda`, but the instructions are general to all machines capable of setting up conda & using CUDA. For completeness, here is an outline of the instructions:

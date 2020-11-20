@@ -1,4 +1,1 @@
-Dec 31, 2019: 
-Moved the existing `utils.py` -> `utils_old.py` .
-
-The new `utils.py` should allow for the concatenation of multiple HDF5 files into a single dataset object, via `torch.utils.data.ConcatDataset`.
+The dataloading is performed in `utils.py`, which uses `torch.utils.data.ConcatDataset` to created concatenated datasets from sets of HDF5 files. Thus one can have a dataset where the training, testing and validation subsets are themselves split up into multiple files, and this script will bunch them together.
