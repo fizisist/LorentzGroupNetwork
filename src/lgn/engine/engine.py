@@ -219,7 +219,7 @@ class Trainer:
             logstring += ', L:{:> 9.4f}, ACC:{:> 9.4f}, AUC:{:> 9.4f}'.format(self.loss_val, self.alt_loss_val, self.score)
             # logstring += '1/eB@{:> 2.2f}: {:4.4f}'.format(self.score2, 1/self.score1 if self.score1 > 0 else 0.)
             logstring += '  dt:{:> 6.2f}{:> 8.2f}{:> 8.2f}'.format(dtb, tepoch, tcollate)
-            logstring += '  {:.2E}'.format(self.scheduler.get_lr()[0])
+            logstring += '  {:.2E}'.format(self.scheduler.get_last_lr()[0])
             logger.info(logstring)
 
         if self.summarize:
