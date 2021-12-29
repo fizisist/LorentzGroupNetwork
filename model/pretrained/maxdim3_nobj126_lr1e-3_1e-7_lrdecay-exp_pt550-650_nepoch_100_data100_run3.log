@@ -1,0 +1,1298 @@
+Initializing simulation based upon argument string:
+scripts/train_lgn.py --datadir=/data/clariant/toptag/converted --maxdim=3 --max-zf=1 --num-channels 2 4 4 2 --num-epoch=100 --batch-size=8 --num-cg-levels=3 --scale=0.005 --lr-init=0.001 --lr-final=0.0000001 --mlp=True --alpha=100 --pmu-in=True --nobj=126 --lr-decay-type=exp -v=0 --prefix=set12n126run3
+Log, best, checkpoint, load files: ./log/set12n126run3.log ./model/set12n126run3_best.pt ./model/set12n126run3.pt ./model/set12n126run3.pt
+Dataset, learning target, datadir: jet is_signal /data/clariant/toptag/converted
+Git status: 8861992
+
+Values of all model arguments:
+Namespace(activation='leakyrelu', add_beams=True, alpha=100.0, batch_group_size=1, batch_size=8, beam_mass=1, bestfile='./model/set12n126run3_best.pt', checkfile='./model/set12n126run3.pt', cuda=True, cutoff_decay=0, cutoff_type=['learn'], datadir='/data/clariant/toptag/converted', dataset='jet', dtype='float', force_download=False, full_scalars=False, gaussian_mask=False, hard_cut_rad=inf, input='linear', level_gain=[1.0], load=False, loadfile='./model/set12n126run3.pt', log_level='info', logdir='log/', logfile='./log/set12n126run3.log', lr_decay=inf, lr_decay_type='exp', lr_final=1e-07, lr_init=0.001, lr_minibatch=True, max_zf=[1], maxdim=[3], mlp=True, mlp_depth=3, mlp_width=2, modeldir='model/', nobj=126, num_basis_fn=10, num_cg_levels=3, num_channels=[2, 4, 4, 2], num_epoch=100, num_mpnn_levels=1, num_test=-1, num_train=-1, num_valid=-1, num_workers=0, optim='amsgrad', parallel=False, pmu_in=True, predict=True, predictdir='predict/', predictfile='./predict/set12n126run3', prefix='set12n126run3', quiet=True, save=True, scale=0.005, seed=1, sgd_restart=-1, shuffle=True, soft_cut_rad=inf, soft_cut_width=inf, target='is_signal', task='train', test=True, textlog=True, top='linear', verbose=False, weight_decay=0, weight_init='randn', workdir='./')
+Beginning training on CUDA/GPU! Device: 0
+Initializing network!
+hard_cut_rad: [inf, inf, inf]
+soft_cut_rad: [inf, inf, inf]
+soft_cut_width: [inf, inf, inf]
+maxdim: [3, 3, 3]
+max_zf: [1, 1, 1]
+num_channels: [2, 4, 4, 2]
+CGdict maxdim: 3
+{(0, 0): 2, (1, 1): 2}
+{(0, 0): 4, (1, 1): 4, (0, 2): 4, (2, 0): 4, (2, 2): 4}
+{(0, 0): 4, (1, 1): 4, (0, 2): 4, (2, 0): 4, (2, 2): 4}
+{(0, 0): 2, (1, 1): 2, (0, 2): 2, (2, 0): 2, (2, 2): 2}
+Model initialized. Number of parameters: 6014
+Testing network for symmetries:
+Beginning covariance test!
+Boost invariance test. The output is a table of [gamma, rel. deviation] tuples:
+[[1.0, 0.0], [1.5430806348152437, 1.5903231087577296e-07], [3.7621956910836314, 3.9602164747520874e-07], [10.067661995777765, 2.9405387067527045e-06], [27.308232836016487, 0.0003248671710025519], [74.20994852478785, 0.0009094575070776045], [201.7156361224559, 0.002811519894748926], [548.317035155212, 0.12071789056062698], [1490.479161252178, 494.5013427734375], [4051.5420254925943, 11306.0400390625]]
+Rotation invariance test. The output is a table of [angle, rel. deviation] tuples:
+[[0.0, 0.0], [1.0, 1.2784950342847878e-07], [2.0, 1.559140372364709e-07], [3.0, 1.5279574938631413e-07], [4.0, 2.0736567307721998e-07], [5.0, 1.1225810681025905e-07], [6.0, 1.652688723652318e-07], [7.0, 1.0913982606552963e-07], [8.0, 1.4344091425755323e-07], [9.0, 9.666670308661196e-08]]
+Averages of components of all tensors:
+ [{(0, 0): 0.5268906354904175, (1, 1): 0.000744153163395822}, {(2, 0): 0.00024262563965748996, (1, 1): 0.024109667167067528, (2, 2): 0.0005100974231027067, (0, 2): 0.0001849419204518199, (0, 0): 0.23971252143383026}, {(2, 0): 8.026665454963222e-05, (1, 1): 0.004276650492101908, (2, 2): 0.00034231506288051605, (0, 2): 0.00012328839511610568, (0, 0): 0.13391050696372986}, {(2, 0): 6.046831185813062e-05, (1, 1): 0.001921206247061491, (2, 2): 3.7301946576917544e-05, (0, 2): 4.749799700221047e-05, (0, 0): 0.13787364959716797}]
+Medians of components of all tensors:
+ [{(0, 0): 0.558208167552948, (1, 1): 0.0}, {(2, 0): 6.0660532152923e-10, (1, 1): 0.00599278649315238, (2, 2): 4.585890201269649e-05, (0, 2): 4.1333902967011227e-10, (0, 0): 0.20816268026828766}, {(2, 0): 9.83317477221135e-06, (1, 1): 0.0010010715341195464, (2, 2): 6.923415639903396e-05, (0, 2): 1.3058222975814715e-05, (0, 0): 0.10578352212905884}, {(2, 0): 1.1709521459124517e-05, (1, 1): 0.0006591026321984828, (2, 2): 7.97541633801302e-06, (0, 2): 8.074029210547451e-06, (0, 0): 0.10517070442438126}]
+Rotation Invariance test (relative): 0.00022384
+Largest deviation in covariance test : 0.0096518
+Largest deviation in covariance test 0.0096518 detected! Detailed summary (all relative):
+(lvl, key) = (0, (0, 0)) -> 9.9502e-05 (norm) 1.7083e-05 (mean)
+(lvl, key) = (0, (1, 1)) -> 1.285e-07 (norm) 9.6015e-08 (mean)
+(lvl, key) = (1, (2, 0)) -> 6.0581e-06 (norm) 1.2085e-05 (mean)
+(lvl, key) = (1, (1, 1)) -> 0.0004002 (norm) 0.00036105 (mean)
+(lvl, key) = (1, (2, 2)) -> 7.2736e-05 (norm) 1.2006e-05 (mean)
+(lvl, key) = (1, (0, 2)) -> 7.5829e-06 (norm) 1.5226e-05 (mean)
+(lvl, key) = (1, (0, 0)) -> 0.0013264 (norm) 0.00012808 (mean)
+(lvl, key) = (2, (2, 0)) -> 0.045473 (norm) 0.011096 (mean)
+(lvl, key) = (2, (1, 1)) -> 0.0026311 (norm) 0.0009712 (mean)
+(lvl, key) = (2, (2, 2)) -> 0.0001763 (norm) 5.9114e-05 (mean)
+(lvl, key) = (2, (0, 2)) -> 0.016687 (norm) 0.0046673 (mean)
+(lvl, key) = (2, (0, 0)) -> 0.0020288 (norm) 0.00028079 (mean)
+(lvl, key) = (3, (2, 0)) -> 0.077565 (norm) 0.087426 (mean)
+(lvl, key) = (3, (1, 1)) -> 0.0015147 (norm) 0.0010567 (mean)
+(lvl, key) = (3, (2, 2)) -> 0.00059771 (norm) 0.00046527 (mean)
+(lvl, key) = (3, (0, 2)) -> 0.053884 (norm) 0.061343 (mean)
+(lvl, key) = (3, (0, 0)) -> 0.00032102 (norm) 6.7582e-05 (mean)
+Beginning permutation test!
+Permutation Invariance test error: 0.137968510389328
+Beginning batch invariance test!
+Batch invariance test error: 3.991399069036561e-07
+Test complete!
+Starting Epoch: 1
+Epoch 1 Complete! Current Training Loss:     0.2282     0.9087     0.9423     65.2503 @0.3000
+[[0.442 0.058]
+ [0.033 0.467]]
+
+ROC saved to file ./predict/set12n126run3.epoch1.train_ROC.csv
+
+Saving predictions to file: ./predict/set12n126run3.final.train.pt
+Saving model to checkpoint file: ./model/set12n126run3.pt
+Starting testing on valid set: 
+ Done! (Time: 2187.861194s)
+Epoch 1 Complete! Current Validation Loss:     0.1931     0.9210     0.9614     112.7605 @0.3001
+[[0.443 0.057]
+ [0.022 0.478]]
+
+ROC saved to file ./predict/set12n126run3.epoch1.valid_ROC.csv
+
+Saving predictions to file: ./predict/set12n126run3.final.valid.pt
+Lowest loss achieved! Saving best model to file: ./model/set12n126run3_best.pt
+Epoch 1 complete!
+Starting Epoch: 2
+Epoch 2 Complete! Current Training Loss:     0.1939     0.9215     0.9637     130.2200 @0.3000
+[[0.45  0.05 ]
+ [0.028 0.472]]
+
+ROC saved to file ./predict/set12n126run3.epoch2.train_ROC.csv
+
+Saving predictions to file: ./predict/set12n126run3.final.train.pt
+Saving model to checkpoint file: ./model/set12n126run3.pt
+Starting testing on valid set: 
+ Done! (Time: 2187.179538s)
+Epoch 2 Complete! Current Validation Loss:     0.1884     0.9237     0.9687     182.6863 @0.2999
+[[0.455 0.045]
+ [0.032 0.468]]
+
+ROC saved to file ./predict/set12n126run3.epoch2.valid_ROC.csv
+
+Saving predictions to file: ./predict/set12n126run3.final.valid.pt
+Lowest loss achieved! Saving best model to file: ./model/set12n126run3_best.pt
+Epoch 2 complete!
+Starting Epoch: 3
+Epoch 3 Complete! Current Training Loss:     0.1898     0.9235     0.9657     161.4728 @0.3000
+[[0.452 0.048]
+ [0.028 0.472]]
+
+ROC saved to file ./predict/set12n126run3.epoch3.train_ROC.csv
+
+Saving predictions to file: ./predict/set12n126run3.final.train.pt
+Saving model to checkpoint file: ./model/set12n126run3.pt
+Starting testing on valid set: 
+ Done! (Time: 2165.160633s)
+Epoch 3 Complete! Current Validation Loss:     0.1908     0.9230     0.9664     199.7056 @0.3000
+[[0.442 0.058]
+ [0.019 0.481]]
+
+ROC saved to file ./predict/set12n126run3.epoch3.valid_ROC.csv
+
+Saving predictions to file: ./predict/set12n126run3.final.valid.pt
+Epoch 3 complete!
+Starting Epoch: 4
+Epoch 4 Complete! Current Training Loss:     0.1876     0.9245     0.9677     203.2638 @0.3000
+[[0.452 0.048]
+ [0.028 0.472]]
+
+ROC saved to file ./predict/set12n126run3.epoch4.train_ROC.csv
+
+Saving predictions to file: ./predict/set12n126run3.final.train.pt
+Saving model to checkpoint file: ./model/set12n126run3.pt
+Starting testing on valid set: 
+ Done! (Time: 2171.774493s)
+Epoch 4 Complete! Current Validation Loss:     0.1871     0.9242     0.9686     240.1704 @0.3000
+[[0.448 0.052]
+ [0.024 0.476]]
+
+ROC saved to file ./predict/set12n126run3.epoch4.valid_ROC.csv
+
+Saving predictions to file: ./predict/set12n126run3.final.valid.pt
+Lowest loss achieved! Saving best model to file: ./model/set12n126run3_best.pt
+Epoch 4 complete!
+Starting Epoch: 5
+Epoch 5 Complete! Current Training Loss:     0.1861     0.9251     0.9689     238.7709 @0.3000
+[[0.453 0.047]
+ [0.028 0.472]]
+
+ROC saved to file ./predict/set12n126run3.epoch5.train_ROC.csv
+
+Saving predictions to file: ./predict/set12n126run3.final.train.pt
+Saving model to checkpoint file: ./model/set12n126run3.pt
+Starting testing on valid set: 
+ Done! (Time: 2151.264681s)
+Epoch 5 Complete! Current Validation Loss:     0.1962     0.9220     0.9713     311.9241 @0.3000
+[[0.439 0.061]
+ [0.017 0.483]]
+
+ROC saved to file ./predict/set12n126run3.epoch5.valid_ROC.csv
+
+Saving predictions to file: ./predict/set12n126run3.final.valid.pt
+Epoch 5 complete!
+Starting Epoch: 6
+Epoch 6 Complete! Current Training Loss:     0.1854     0.9255     0.9702     261.1138 @0.3000
+[[0.453 0.047]
+ [0.028 0.472]]
+
+ROC saved to file ./predict/set12n126run3.epoch6.train_ROC.csv
+
+Saving predictions to file: ./predict/set12n126run3.final.train.pt
+Saving model to checkpoint file: ./model/set12n126run3.pt
+Starting testing on valid set: 
+ Done! (Time: 2177.42701s)
+Epoch 6 Complete! Current Validation Loss:     0.1841     0.9259     0.9710     276.4102 @0.2999
+[[0.45  0.05 ]
+ [0.024 0.476]]
+
+ROC saved to file ./predict/set12n126run3.epoch6.valid_ROC.csv
+
+Saving predictions to file: ./predict/set12n126run3.final.valid.pt
+Lowest loss achieved! Saving best model to file: ./model/set12n126run3_best.pt
+Epoch 6 complete!
+Starting Epoch: 7
+Epoch 7 Complete! Current Training Loss:     0.1846     0.9258     0.9717     299.9123 @0.3000
+[[0.453 0.047]
+ [0.028 0.472]]
+
+ROC saved to file ./predict/set12n126run3.epoch7.train_ROC.csv
+
+Saving predictions to file: ./predict/set12n126run3.final.train.pt
+Saving model to checkpoint file: ./model/set12n126run3.pt
+Starting testing on valid set: 
+ Done! (Time: 2190.031131s)
+Epoch 7 Complete! Current Validation Loss:     0.1846     0.9260     0.9731     294.1650 @0.3001
+[[0.455 0.045]
+ [0.029 0.471]]
+
+ROC saved to file ./predict/set12n126run3.epoch7.valid_ROC.csv
+
+Saving predictions to file: ./predict/set12n126run3.final.valid.pt
+Epoch 7 complete!
+Starting Epoch: 8
+Epoch 8 Complete! Current Training Loss:     0.1839     0.9262     0.9723     313.2556 @0.3000
+[[0.454 0.046]
+ [0.028 0.472]]
+
+ROC saved to file ./predict/set12n126run3.epoch8.train_ROC.csv
+
+Saving predictions to file: ./predict/set12n126run3.final.train.pt
+Saving model to checkpoint file: ./model/set12n126run3.pt
+Starting testing on valid set: 
+ Done! (Time: 2172.744204s)
+Epoch 8 Complete! Current Validation Loss:     0.1837     0.9264     0.9729     332.5132 @0.2999
+[[0.452 0.048]
+ [0.025 0.475]]
+
+ROC saved to file ./predict/set12n126run3.epoch8.valid_ROC.csv
+
+Saving predictions to file: ./predict/set12n126run3.final.valid.pt
+Lowest loss achieved! Saving best model to file: ./model/set12n126run3_best.pt
+Epoch 8 complete!
+Starting Epoch: 9
+Epoch 9 Complete! Current Training Loss:     0.1833     0.9261     0.9729     330.8869 @0.3001
+[[0.454 0.046]
+ [0.028 0.472]]
+
+ROC saved to file ./predict/set12n126run3.epoch9.train_ROC.csv
+
+Saving predictions to file: ./predict/set12n126run3.final.train.pt
+Saving model to checkpoint file: ./model/set12n126run3.pt
+Starting testing on valid set: 
+ Done! (Time: 2176.092976s)
+Epoch 9 Complete! Current Validation Loss:     0.1851     0.9255     0.9742     363.7238 @0.3000
+[[0.447 0.053]
+ [0.021 0.479]]
+
+ROC saved to file ./predict/set12n126run3.epoch9.valid_ROC.csv
+
+Saving predictions to file: ./predict/set12n126run3.final.valid.pt
+Epoch 9 complete!
+Starting Epoch: 10
+Epoch 10 Complete! Current Training Loss:     0.1828     0.9265     0.9735     349.6091 @0.3000
+[[0.454 0.046]
+ [0.028 0.472]]
+
+ROC saved to file ./predict/set12n126run3.epoch10.train_ROC.csv
+
+Saving predictions to file: ./predict/set12n126run3.final.train.pt
+Saving model to checkpoint file: ./model/set12n126run3.pt
+Starting testing on valid set: 
+ Done! (Time: 2242.419218s)
+Epoch 10 Complete! Current Validation Loss:     0.1851     0.9257     0.9734     316.3312 @0.2999
+[[0.461 0.039]
+ [0.035 0.465]]
+
+ROC saved to file ./predict/set12n126run3.epoch10.valid_ROC.csv
+
+Saving predictions to file: ./predict/set12n126run3.final.valid.pt
+Epoch 10 complete!
+Starting Epoch: 11
+Epoch 11 Complete! Current Training Loss:     0.1823     0.9267     0.9735     342.4904 @0.3000
+[[0.454 0.046]
+ [0.027 0.472]]
+
+ROC saved to file ./predict/set12n126run3.epoch11.train_ROC.csv
+
+Saving predictions to file: ./predict/set12n126run3.final.train.pt
+Saving model to checkpoint file: ./model/set12n126run3.pt
+Starting testing on valid set: 
+ Done! (Time: 2211.758121s)
+Epoch 11 Complete! Current Validation Loss:     0.1864     0.9257     0.9731     313.3795 @0.2998
+[[0.461 0.039]
+ [0.036 0.464]]
+
+ROC saved to file ./predict/set12n126run3.epoch11.valid_ROC.csv
+
+Saving predictions to file: ./predict/set12n126run3.final.valid.pt
+Epoch 11 complete!
+Starting Epoch: 12
+Epoch 12 Complete! Current Training Loss:     0.1818     0.9270     0.9735     338.4701 @0.3000
+[[0.455 0.046]
+ [0.027 0.473]]
+
+ROC saved to file ./predict/set12n126run3.epoch12.train_ROC.csv
+
+Saving predictions to file: ./predict/set12n126run3.final.train.pt
+Saving model to checkpoint file: ./model/set12n126run3.pt
+Starting testing on valid set: 
+ Done! (Time: 2190.03978s)
+Epoch 12 Complete! Current Validation Loss:     0.1818     0.9273     0.9731     306.7017 @0.3001
+[[0.454 0.046]
+ [0.027 0.473]]
+
+ROC saved to file ./predict/set12n126run3.epoch12.valid_ROC.csv
+
+Saving predictions to file: ./predict/set12n126run3.final.valid.pt
+Lowest loss achieved! Saving best model to file: ./model/set12n126run3_best.pt
+Epoch 12 complete!
+Starting Epoch: 13
+Epoch 13 Complete! Current Training Loss:     0.1814     0.9271     0.9737     340.5641 @0.3000
+[[0.455 0.046]
+ [0.027 0.473]]
+
+ROC saved to file ./predict/set12n126run3.epoch13.train_ROC.csv
+
+Saving predictions to file: ./predict/set12n126run3.final.train.pt
+Saving model to checkpoint file: ./model/set12n126run3.pt
+Starting testing on valid set: 
+ Done! (Time: 2447.673047s)
+Epoch 13 Complete! Current Validation Loss:     0.1824     0.9269     0.9730     318.3302 @0.3000
+[[0.456 0.044]
+ [0.029 0.471]]
+
+ROC saved to file ./predict/set12n126run3.epoch13.valid_ROC.csv
+
+Saving predictions to file: ./predict/set12n126run3.final.valid.pt
+Epoch 13 complete!
+Starting Epoch: 14
+Epoch 14 Complete! Current Training Loss:     0.1811     0.9273     0.9737     338.0921 @0.3000
+[[0.455 0.045]
+ [0.027 0.473]]
+
+ROC saved to file ./predict/set12n126run3.epoch14.train_ROC.csv
+
+Saving predictions to file: ./predict/set12n126run3.final.train.pt
+Saving model to checkpoint file: ./model/set12n126run3.pt
+Starting testing on valid set: 
+ Done! (Time: 2173.639252s)
+Epoch 14 Complete! Current Validation Loss:     0.1835     0.9258     0.9743     375.9384 @0.3001
+[[0.447 0.053]
+ [0.021 0.479]]
+
+ROC saved to file ./predict/set12n126run3.epoch14.valid_ROC.csv
+
+Saving predictions to file: ./predict/set12n126run3.final.valid.pt
+Epoch 14 complete!
+Starting Epoch: 15
+Epoch 15 Complete! Current Training Loss:     0.1808     0.9275     0.9736     334.3584 @0.3001
+[[0.455 0.045]
+ [0.027 0.473]]
+
+ROC saved to file ./predict/set12n126run3.epoch15.train_ROC.csv
+
+Saving predictions to file: ./predict/set12n126run3.final.train.pt
+Saving model to checkpoint file: ./model/set12n126run3.pt
+Starting testing on valid set: 
+ Done! (Time: 2266.202598s)
+Epoch 15 Complete! Current Validation Loss:     0.1811     0.9273     0.9738     330.8752 @0.3000
+[[0.457 0.043]
+ [0.03  0.47 ]]
+
+ROC saved to file ./predict/set12n126run3.epoch15.valid_ROC.csv
+
+Saving predictions to file: ./predict/set12n126run3.final.valid.pt
+Lowest loss achieved! Saving best model to file: ./model/set12n126run3_best.pt
+Epoch 15 complete!
+Starting Epoch: 16
+Epoch 16 Complete! Current Training Loss:     0.1805     0.9274     0.9735     320.5521 @0.3000
+[[0.455 0.045]
+ [0.027 0.473]]
+
+ROC saved to file ./predict/set12n126run3.epoch16.train_ROC.csv
+
+Saving predictions to file: ./predict/set12n126run3.final.train.pt
+Saving model to checkpoint file: ./model/set12n126run3.pt
+Starting testing on valid set: 
+ Done! (Time: 2225.994277s)
+Epoch 16 Complete! Current Validation Loss:     0.1828     0.9263     0.9725     272.3014 @0.2998
+[[0.46  0.04 ]
+ [0.033 0.467]]
+
+ROC saved to file ./predict/set12n126run3.epoch16.valid_ROC.csv
+
+Saving predictions to file: ./predict/set12n126run3.final.valid.pt
+Epoch 16 complete!
+Starting Epoch: 17
+Epoch 17 Complete! Current Training Loss:     0.1802     0.9276     0.9735     317.3601 @0.3000
+[[0.455 0.045]
+ [0.027 0.473]]
+
+ROC saved to file ./predict/set12n126run3.epoch17.train_ROC.csv
+
+Saving predictions to file: ./predict/set12n126run3.final.train.pt
+Saving model to checkpoint file: ./model/set12n126run3.pt
+Starting testing on valid set: 
+ Done! (Time: 2727.420775s)
+Epoch 17 Complete! Current Validation Loss:     0.1819     0.9271     0.9737     311.4420 @0.3000
+[[0.459 0.041]
+ [0.032 0.468]]
+
+ROC saved to file ./predict/set12n126run3.epoch17.valid_ROC.csv
+
+Saving predictions to file: ./predict/set12n126run3.final.valid.pt
+Epoch 17 complete!
+Starting Epoch: 18
+Epoch 18 Complete! Current Training Loss:     0.1799     0.9278     0.9738     335.8419 @0.3000
+[[0.455 0.045]
+ [0.027 0.473]]
+
+ROC saved to file ./predict/set12n126run3.epoch18.train_ROC.csv
+
+Saving predictions to file: ./predict/set12n126run3.final.train.pt
+Saving model to checkpoint file: ./model/set12n126run3.pt
+Starting testing on valid set: 
+ Done! (Time: 2220.231106s)
+Epoch 18 Complete! Current Validation Loss:     0.1812     0.9273     0.9741     311.4420 @0.2998
+[[0.452 0.048]
+ [0.025 0.475]]
+
+ROC saved to file ./predict/set12n126run3.epoch18.valid_ROC.csv
+
+Saving predictions to file: ./predict/set12n126run3.final.valid.pt
+Epoch 18 complete!
+Starting Epoch: 19
+Epoch 19 Complete! Current Training Loss:     0.1797     0.9279     0.9735     321.5736 @0.3000
+[[0.455 0.045]
+ [0.027 0.473]]
+
+ROC saved to file ./predict/set12n126run3.epoch19.train_ROC.csv
+
+Saving predictions to file: ./predict/set12n126run3.final.train.pt
+Saving model to checkpoint file: ./model/set12n126run3.pt
+Starting testing on valid set: 
+ Done! (Time: 2221.064618s)
+Epoch 19 Complete! Current Validation Loss:     0.1809     0.9273     0.9741     336.3990 @0.2999
+[[0.456 0.044]
+ [0.029 0.471]]
+
+ROC saved to file ./predict/set12n126run3.epoch19.valid_ROC.csv
+
+Saving predictions to file: ./predict/set12n126run3.final.valid.pt
+Lowest loss achieved! Saving best model to file: ./model/set12n126run3_best.pt
+Epoch 19 complete!
+Starting Epoch: 20
+Epoch 20 Complete! Current Training Loss:     0.1794     0.9279     0.9737     319.7059 @0.3000
+[[0.455 0.045]
+ [0.027 0.473]]
+
+ROC saved to file ./predict/set12n126run3.epoch20.train_ROC.csv
+
+Saving predictions to file: ./predict/set12n126run3.final.train.pt
+Saving model to checkpoint file: ./model/set12n126run3.pt
+Starting testing on valid set: 
+ Done! (Time: 2218.539547s)
+Epoch 20 Complete! Current Validation Loss:     0.1800     0.9277     0.9746     343.2760 @0.3000
+[[0.455 0.045]
+ [0.028 0.472]]
+
+ROC saved to file ./predict/set12n126run3.epoch20.valid_ROC.csv
+
+Saving predictions to file: ./predict/set12n126run3.final.valid.pt
+Lowest loss achieved! Saving best model to file: ./model/set12n126run3_best.pt
+Epoch 20 complete!
+Starting Epoch: 21
+Epoch 21 Complete! Current Training Loss:     0.1792     0.9280     0.9740     337.1509 @0.3000
+[[0.455 0.045]
+ [0.027 0.473]]
+
+ROC saved to file ./predict/set12n126run3.epoch21.train_ROC.csv
+
+Saving predictions to file: ./predict/set12n126run3.final.train.pt
+Saving model to checkpoint file: ./model/set12n126run3.pt
+Starting testing on valid set: 
+ Done! (Time: 2210.798101s)
+Epoch 21 Complete! Current Validation Loss:     0.1811     0.9271     0.9742     351.6632 @0.3000
+[[0.45  0.05 ]
+ [0.023 0.477]]
+
+ROC saved to file ./predict/set12n126run3.epoch21.valid_ROC.csv
+
+Saving predictions to file: ./predict/set12n126run3.final.valid.pt
+Epoch 21 complete!
+Starting Epoch: 22
+Epoch 22 Complete! Current Training Loss:     0.1790     0.9280     0.9738     339.6091 @0.3000
+[[0.455 0.045]
+ [0.027 0.473]]
+
+ROC saved to file ./predict/set12n126run3.epoch22.train_ROC.csv
+
+Saving predictions to file: ./predict/set12n126run3.final.train.pt
+Saving model to checkpoint file: ./model/set12n126run3.pt
+Starting testing on valid set: 
+ Done! (Time: 2154.913435s)
+Epoch 22 Complete! Current Validation Loss:     0.1808     0.9272     0.9734     334.7226 @0.3001
+[[0.459 0.041]
+ [0.032 0.468]]
+
+ROC saved to file ./predict/set12n126run3.epoch22.valid_ROC.csv
+
+Saving predictions to file: ./predict/set12n126run3.final.valid.pt
+Epoch 22 complete!
+Starting Epoch: 23
+Epoch 23 Complete! Current Training Loss:     0.1788     0.9281     0.9738     331.2489 @0.3000
+[[0.455 0.045]
+ [0.027 0.473]]
+
+ROC saved to file ./predict/set12n126run3.epoch23.train_ROC.csv
+
+Saving predictions to file: ./predict/set12n126run3.final.train.pt
+Saving model to checkpoint file: ./model/set12n126run3.pt
+Starting testing on valid set: 
+ Done! (Time: 2183.901702s)
+Epoch 23 Complete! Current Validation Loss:     0.1792     0.9280     0.9743     357.9094 @0.2998
+[[0.455 0.045]
+ [0.027 0.473]]
+
+ROC saved to file ./predict/set12n126run3.epoch23.valid_ROC.csv
+
+Saving predictions to file: ./predict/set12n126run3.final.valid.pt
+Lowest loss achieved! Saving best model to file: ./model/set12n126run3_best.pt
+Epoch 23 complete!
+Starting Epoch: 24
+Epoch 24 Complete! Current Training Loss:     0.1786     0.9282     0.9740     347.0046 @0.3000
+[[0.455 0.045]
+ [0.027 0.473]]
+
+ROC saved to file ./predict/set12n126run3.epoch24.train_ROC.csv
+
+Saving predictions to file: ./predict/set12n126run3.final.train.pt
+Saving model to checkpoint file: ./model/set12n126run3.pt
+Starting testing on valid set: 
+ Done! (Time: 2178.144203s)
+Epoch 24 Complete! Current Validation Loss:     0.1801     0.9278     0.9727     295.4589 @0.2999
+[[0.455 0.045]
+ [0.027 0.473]]
+
+ROC saved to file ./predict/set12n126run3.epoch24.valid_ROC.csv
+
+Saving predictions to file: ./predict/set12n126run3.final.valid.pt
+Epoch 24 complete!
+Starting Epoch: 25
+Epoch 25 Complete! Current Training Loss:     0.1784     0.9282     0.9737     341.3320 @0.3000
+[[0.455 0.045]
+ [0.027 0.473]]
+
+ROC saved to file ./predict/set12n126run3.epoch25.train_ROC.csv
+
+Saving predictions to file: ./predict/set12n126run3.final.train.pt
+Saving model to checkpoint file: ./model/set12n126run3.pt
+Starting testing on valid set: 
+ Done! (Time: 2165.173656s)
+Epoch 25 Complete! Current Validation Loss:     0.1793     0.9277     0.9742     349.2253 @0.2999
+[[0.454 0.046]
+ [0.026 0.474]]
+
+ROC saved to file ./predict/set12n126run3.epoch25.valid_ROC.csv
+
+Saving predictions to file: ./predict/set12n126run3.final.valid.pt
+Epoch 25 complete!
+Starting Epoch: 26
+Epoch 26 Complete! Current Training Loss:     0.1782     0.9285     0.9736     342.8783 @0.3000
+[[0.456 0.044]
+ [0.027 0.473]]
+
+ROC saved to file ./predict/set12n126run3.epoch26.train_ROC.csv
+
+Saving predictions to file: ./predict/set12n126run3.final.train.pt
+Saving model to checkpoint file: ./model/set12n126run3.pt
+Starting testing on valid set: 
+ Done! (Time: 2225.202209s)
+Epoch 26 Complete! Current Validation Loss:     0.1790     0.9281     0.9732     327.6472 @0.3000
+[[0.455 0.045]
+ [0.026 0.474]]
+
+ROC saved to file ./predict/set12n126run3.epoch26.valid_ROC.csv
+
+Saving predictions to file: ./predict/set12n126run3.final.valid.pt
+Lowest loss achieved! Saving best model to file: ./model/set12n126run3_best.pt
+Epoch 26 complete!
+Starting Epoch: 27
+Epoch 27 Complete! Current Training Loss:     0.1780     0.9285     0.9736     333.9895 @0.3000
+[[0.456 0.044]
+ [0.027 0.473]]
+
+ROC saved to file ./predict/set12n126run3.epoch27.train_ROC.csv
+
+Saving predictions to file: ./predict/set12n126run3.final.train.pt
+Saving model to checkpoint file: ./model/set12n126run3.pt
+Starting testing on valid set: 
+ Done! (Time: 2295.432829s)
+Epoch 27 Complete! Current Validation Loss:     0.1802     0.9271     0.9742     359.1854 @0.3000
+[[0.459 0.041]
+ [0.032 0.468]]
+
+ROC saved to file ./predict/set12n126run3.epoch27.valid_ROC.csv
+
+Saving predictions to file: ./predict/set12n126run3.final.valid.pt
+Epoch 27 complete!
+Starting Epoch: 28
+Epoch 28 Complete! Current Training Loss:     0.1778     0.9286     0.9738     355.9806 @0.3000
+[[0.456 0.044]
+ [0.027 0.473]]
+
+ROC saved to file ./predict/set12n126run3.epoch28.train_ROC.csv
+
+Saving predictions to file: ./predict/set12n126run3.final.train.pt
+Saving model to checkpoint file: ./model/set12n126run3.pt
+Starting testing on valid set: 
+ Done! (Time: 2288.260456s)
+Epoch 28 Complete! Current Validation Loss:     0.1805     0.9273     0.9743     371.7768 @0.2999
+[[0.449 0.051]
+ [0.022 0.478]]
+
+ROC saved to file ./predict/set12n126run3.epoch28.valid_ROC.csv
+
+Saving predictions to file: ./predict/set12n126run3.final.valid.pt
+Epoch 28 complete!
+Starting Epoch: 29
+Epoch 29 Complete! Current Training Loss:     0.1777     0.9287     0.9739     350.8244 @0.3000
+[[0.456 0.044]
+ [0.027 0.473]]
+
+ROC saved to file ./predict/set12n126run3.epoch29.train_ROC.csv
+
+Saving predictions to file: ./predict/set12n126run3.final.train.pt
+Saving model to checkpoint file: ./model/set12n126run3.pt
+Starting testing on valid set: 
+ Done! (Time: 2321.775683s)
+Epoch 29 Complete! Current Validation Loss:     0.1789     0.9280     0.9738     345.0394 @0.2998
+[[0.454 0.046]
+ [0.026 0.474]]
+
+ROC saved to file ./predict/set12n126run3.epoch29.valid_ROC.csv
+
+Saving predictions to file: ./predict/set12n126run3.final.valid.pt
+Lowest loss achieved! Saving best model to file: ./model/set12n126run3_best.pt
+Epoch 29 complete!
+Starting Epoch: 30
+Epoch 30 Complete! Current Training Loss:     0.1775     0.9287     0.9739     366.5393 @0.3000
+[[0.456 0.044]
+ [0.027 0.473]]
+
+ROC saved to file ./predict/set12n126run3.epoch30.train_ROC.csv
+
+Saving predictions to file: ./predict/set12n126run3.final.train.pt
+Saving model to checkpoint file: ./model/set12n126run3.pt
+Starting testing on valid set: 
+ Done! (Time: 2391.290916s)
+Epoch 30 Complete! Current Validation Loss:     0.1792     0.9277     0.9740     386.0211 @0.3000
+[[0.455 0.045]
+ [0.027 0.473]]
+
+ROC saved to file ./predict/set12n126run3.epoch30.valid_ROC.csv
+
+Saving predictions to file: ./predict/set12n126run3.final.valid.pt
+Epoch 30 complete!
+Starting Epoch: 31
+Epoch 31 Complete! Current Training Loss:     0.1774     0.9288     0.9739     363.4592 @0.3000
+[[0.456 0.044]
+ [0.027 0.473]]
+
+ROC saved to file ./predict/set12n126run3.epoch31.train_ROC.csv
+
+Saving predictions to file: ./predict/set12n126run3.final.train.pt
+Saving model to checkpoint file: ./model/set12n126run3.pt
+Starting testing on valid set: 
+ Done! (Time: 2167.569931s)
+Epoch 31 Complete! Current Validation Loss:     0.1792     0.9279     0.9728     351.6632 @0.3000
+[[0.452 0.048]
+ [0.024 0.476]]
+
+ROC saved to file ./predict/set12n126run3.epoch31.valid_ROC.csv
+
+Saving predictions to file: ./predict/set12n126run3.final.valid.pt
+Epoch 31 complete!
+Starting Epoch: 32
+Epoch 32 Complete! Current Training Loss:     0.1773     0.9288     0.9738     369.4466 @0.3000
+[[0.456 0.044]
+ [0.027 0.473]]
+
+ROC saved to file ./predict/set12n126run3.epoch32.train_ROC.csv
+
+Saving predictions to file: ./predict/set12n126run3.final.train.pt
+Saving model to checkpoint file: ./model/set12n126run3.pt
+Starting testing on valid set: 
+ Done! (Time: 2149.435308s)
+Epoch 32 Complete! Current Validation Loss:     0.1787     0.9281     0.9734     337.5260 @0.2997
+[[0.456 0.044]
+ [0.028 0.472]]
+
+ROC saved to file ./predict/set12n126run3.epoch32.valid_ROC.csv
+
+Saving predictions to file: ./predict/set12n126run3.final.valid.pt
+Lowest loss achieved! Saving best model to file: ./model/set12n126run3_best.pt
+Epoch 32 complete!
+Starting Epoch: 33
+Epoch 33 Complete! Current Training Loss:     0.1772     0.9288     0.9740     370.3505 @0.3000
+[[0.456 0.044]
+ [0.027 0.473]]
+
+ROC saved to file ./predict/set12n126run3.epoch33.train_ROC.csv
+
+Saving predictions to file: ./predict/set12n126run3.final.train.pt
+Saving model to checkpoint file: ./model/set12n126run3.pt
+Starting testing on valid set: 
+ Done! (Time: 2149.442795s)
+Epoch 33 Complete! Current Validation Loss:     0.1787     0.9284     0.9734     376.6411 @0.3000
+[[0.457 0.043]
+ [0.028 0.472]]
+
+ROC saved to file ./predict/set12n126run3.epoch33.valid_ROC.csv
+
+Saving predictions to file: ./predict/set12n126run3.final.valid.pt
+Epoch 33 complete!
+Starting Epoch: 34
+Epoch 34 Complete! Current Training Loss:     0.1771     0.9290     0.9741     389.4039 @0.3000
+[[0.456 0.044]
+ [0.027 0.473]]
+
+ROC saved to file ./predict/set12n126run3.epoch34.train_ROC.csv
+
+Saving predictions to file: ./predict/set12n126run3.final.train.pt
+Saving model to checkpoint file: ./model/set12n126run3.pt
+Starting testing on valid set: 
+ Done! (Time: 2159.111395s)
+Epoch 34 Complete! Current Validation Loss:     0.1790     0.9277     0.9737     368.3784 @0.3000
+[[0.459 0.041]
+ [0.031 0.469]]
+
+ROC saved to file ./predict/set12n126run3.epoch34.valid_ROC.csv
+
+Saving predictions to file: ./predict/set12n126run3.final.valid.pt
+Epoch 34 complete!
+Starting Epoch: 35
+Epoch 35 Complete! Current Training Loss:     0.1770     0.9290     0.9741     386.4218 @0.3000
+[[0.456 0.044]
+ [0.027 0.473]]
+
+ROC saved to file ./predict/set12n126run3.epoch35.train_ROC.csv
+
+Saving predictions to file: ./predict/set12n126run3.final.train.pt
+Saving model to checkpoint file: ./model/set12n126run3.pt
+Starting testing on valid set: 
+ Done! (Time: 2170.901561s)
+Epoch 35 Complete! Current Validation Loss:     0.1790     0.9279     0.9739     365.7042 @0.3000
+[[0.457 0.043]
+ [0.029 0.471]]
+
+ROC saved to file ./predict/set12n126run3.epoch35.valid_ROC.csv
+
+Saving predictions to file: ./predict/set12n126run3.final.valid.pt
+Epoch 35 complete!
+Starting Epoch: 36
+Epoch 36 Complete! Current Training Loss:     0.1769     0.9290     0.9742     387.9071 @0.3000
+[[0.456 0.044]
+ [0.027 0.473]]
+
+ROC saved to file ./predict/set12n126run3.epoch36.train_ROC.csv
+
+Saving predictions to file: ./predict/set12n126run3.final.train.pt
+Saving model to checkpoint file: ./model/set12n126run3.pt
+Starting testing on valid set: 
+ Done! (Time: 2175.121543s)
+Epoch 36 Complete! Current Validation Loss:     0.1784     0.9285     0.9739     378.7650 @0.3000
+[[0.454 0.046]
+ [0.025 0.475]]
+
+ROC saved to file ./predict/set12n126run3.epoch36.valid_ROC.csv
+
+Saving predictions to file: ./predict/set12n126run3.final.valid.pt
+Lowest loss achieved! Saving best model to file: ./model/set12n126run3_best.pt
+Epoch 36 complete!
+Starting Epoch: 37
+Epoch 37 Complete! Current Training Loss:     0.1768     0.9289     0.9740     389.1536 @0.3000
+[[0.456 0.044]
+ [0.027 0.473]]
+
+ROC saved to file ./predict/set12n126run3.epoch37.train_ROC.csv
+
+Saving predictions to file: ./predict/set12n126run3.final.train.pt
+Saving model to checkpoint file: ./model/set12n126run3.pt
+Starting testing on valid set: 
+ Done! (Time: 2262.17305s)
+Epoch 37 Complete! Current Validation Loss:     0.1782     0.9284     0.9739     380.9130 @0.3000
+[[0.457 0.043]
+ [0.028 0.472]]
+
+ROC saved to file ./predict/set12n126run3.epoch37.valid_ROC.csv
+
+Saving predictions to file: ./predict/set12n126run3.final.valid.pt
+Lowest loss achieved! Saving best model to file: ./model/set12n126run3_best.pt
+Epoch 37 complete!
+Starting Epoch: 38
+Epoch 38 Complete! Current Training Loss:     0.1767     0.9290     0.9741     387.4107 @0.3000
+[[0.456 0.044]
+ [0.027 0.473]]
+
+ROC saved to file ./predict/set12n126run3.epoch38.train_ROC.csv
+
+Saving predictions to file: ./predict/set12n126run3.final.train.pt
+Saving model to checkpoint file: ./model/set12n126run3.pt
+Starting testing on valid set: 
+ Done! (Time: 2205.218754s)
+Epoch 38 Complete! Current Validation Loss:     0.1784     0.9283     0.9743     410.3931 @0.3000
+[[0.455 0.045]
+ [0.026 0.474]]
+
+ROC saved to file ./predict/set12n126run3.epoch38.valid_ROC.csv
+
+Saving predictions to file: ./predict/set12n126run3.final.valid.pt
+Epoch 38 complete!
+Starting Epoch: 39
+Epoch 39 Complete! Current Training Loss:     0.1766     0.9291     0.9743     394.9922 @0.3000
+[[0.456 0.044]
+ [0.027 0.473]]
+
+ROC saved to file ./predict/set12n126run3.epoch39.train_ROC.csv
+
+Saving predictions to file: ./predict/set12n126run3.final.train.pt
+Saving model to checkpoint file: ./model/set12n126run3.pt
+Starting testing on valid set: 
+ Done! (Time: 2208.018882s)
+Epoch 39 Complete! Current Validation Loss:     0.1783     0.9283     0.9740     402.2016 @0.3001
+[[0.457 0.043]
+ [0.029 0.471]]
+
+ROC saved to file ./predict/set12n126run3.epoch39.valid_ROC.csv
+
+Saving predictions to file: ./predict/set12n126run3.final.valid.pt
+Epoch 39 complete!
+Starting Epoch: 40
+Epoch 40 Complete! Current Training Loss:     0.1765     0.9292     0.9742     399.6851 @0.3000
+[[0.456 0.044]
+ [0.027 0.473]]
+
+ROC saved to file ./predict/set12n126run3.epoch40.train_ROC.csv
+
+Saving predictions to file: ./predict/set12n126run3.final.train.pt
+Saving model to checkpoint file: ./model/set12n126run3.pt
+Starting testing on valid set: 
+ Done! (Time: 2296.358478s)
+Epoch 40 Complete! Current Validation Loss:     0.1783     0.9282     0.9740     401.4004 @0.3002
+[[0.457 0.043]
+ [0.029 0.471]]
+
+ROC saved to file ./predict/set12n126run3.epoch40.valid_ROC.csv
+
+Saving predictions to file: ./predict/set12n126run3.final.valid.pt
+Epoch 40 complete!
+Starting Epoch: 41
+Epoch 41 Complete! Current Training Loss:     0.1765     0.9291     0.9742     396.5442 @0.3000
+[[0.456 0.044]
+ [0.027 0.473]]
+
+ROC saved to file ./predict/set12n126run3.epoch41.train_ROC.csv
+
+Saving predictions to file: ./predict/set12n126run3.final.train.pt
+Saving model to checkpoint file: ./model/set12n126run3.pt
+Starting testing on valid set: 
+ Done! (Time: 2174.745033s)
+Epoch 41 Complete! Current Validation Loss:     0.1781     0.9285     0.9734     362.4155 @0.2998
+[[0.457 0.043]
+ [0.029 0.471]]
+
+ROC saved to file ./predict/set12n126run3.epoch41.valid_ROC.csv
+
+Saving predictions to file: ./predict/set12n126run3.final.valid.pt
+Lowest loss achieved! Saving best model to file: ./model/set12n126run3_best.pt
+Epoch 41 complete!
+Starting Epoch: 42
+Epoch 42 Complete! Current Training Loss:     0.1764     0.9292     0.9742     396.8041 @0.3000
+[[0.456 0.044]
+ [0.027 0.473]]
+
+ROC saved to file ./predict/set12n126run3.epoch42.train_ROC.csv
+
+Saving predictions to file: ./predict/set12n126run3.final.train.pt
+Saving model to checkpoint file: ./model/set12n126run3.pt
+Starting testing on valid set: 
+ Done! (Time: 2243.04498s)
+Epoch 42 Complete! Current Validation Loss:     0.1785     0.9285     0.9741     394.3307 @0.3001
+[[0.453 0.047]
+ [0.024 0.476]]
+
+ROC saved to file ./predict/set12n126run3.epoch42.valid_ROC.csv
+
+Saving predictions to file: ./predict/set12n126run3.final.valid.pt
+Epoch 42 complete!
+Starting Epoch: 43
+Epoch 43 Complete! Current Training Loss:     0.1764     0.9291     0.9743     403.1445 @0.3000
+[[0.456 0.044]
+ [0.027 0.473]]
+
+ROC saved to file ./predict/set12n126run3.epoch43.train_ROC.csv
+
+Saving predictions to file: ./predict/set12n126run3.final.train.pt
+Saving model to checkpoint file: ./model/set12n126run3.pt
+Starting testing on valid set: 
+ Done! (Time: 2164.430051s)
+Epoch 43 Complete! Current Validation Loss:     0.1781     0.9283     0.9740     383.0856 @0.3000
+[[0.458 0.042]
+ [0.029 0.471]]
+
+ROC saved to file ./predict/set12n126run3.epoch43.valid_ROC.csv
+
+Saving predictions to file: ./predict/set12n126run3.final.valid.pt
+Lowest loss achieved! Saving best model to file: ./model/set12n126run3_best.pt
+Epoch 43 complete!
+Starting Epoch: 44
+Epoch 44 Complete! Current Training Loss:     0.1763     0.9293     0.9743     398.1085 @0.3000
+[[0.456 0.044]
+ [0.027 0.473]]
+
+ROC saved to file ./predict/set12n126run3.epoch44.train_ROC.csv
+
+Saving predictions to file: ./predict/set12n126run3.final.train.pt
+Saving model to checkpoint file: ./model/set12n126run3.pt
+Starting testing on valid set: 
+ Done! (Time: 2517.018381s)
+Epoch 44 Complete! Current Validation Loss:     0.1782     0.9284     0.9738     378.0544 @0.3000
+[[0.453 0.047]
+ [0.025 0.475]]
+
+ROC saved to file ./predict/set12n126run3.epoch44.valid_ROC.csv
+
+Saving predictions to file: ./predict/set12n126run3.final.valid.pt
+Epoch 44 complete!
+Starting Epoch: 45
+Initializing simulation based upon argument string:
+scripts/train_lgn.py --datadir=/data/clariant/toptag/converted --maxdim=3 --max-zf=1 --num-channels 2 4 4 2 --num-epoch=100 --batch-size=8 --num-cg-levels=3 --scale=0.005 --lr-init=0.001 --lr-final=0.0000001 --mlp=True --alpha=100 --pmu-in=True --nobj=126 --lr-decay-type=exp --v=0 --prefix=maxdim3_nobj126_lr1e-3_1e-7_lrdecay-exp_pt550-650_nepoch_100_data100_run3 --load
+Log, best, checkpoint, load files: ./log/maxdim3_nobj126_lr1e-3_1e-7_lrdecay-exp_pt550-650_nepoch_100_data100_run3.log ./model/maxdim3_nobj126_lr1e-3_1e-7_lrdecay-exp_pt550-650_nepoch_100_data100_run3_best.pt ./model/maxdim3_nobj126_lr1e-3_1e-7_lrdecay-exp_pt550-650_nepoch_100_data100_run3.pt ./model/maxdim3_nobj126_lr1e-3_1e-7_lrdecay-exp_pt550-650_nepoch_100_data100_run3.pt
+Dataset, learning target, datadir: jet is_signal /data/clariant/toptag/converted
+Git status: 9780fa9
+
+Values of all model arguments:
+Namespace(activation='leakyrelu', add_beams=True, alpha=100.0, batch_group_size=1, batch_size=8, beam_mass=1, bestfile='./model/maxdim3_nobj126_lr1e-3_1e-7_lrdecay-exp_pt550-650_nepoch_100_data100_run3_best.pt', checkfile='./model/maxdim3_nobj126_lr1e-3_1e-7_lrdecay-exp_pt550-650_nepoch_100_data100_run3.pt', cuda=True, cutoff_decay=0, cutoff_type=['learn'], datadir='/data/clariant/toptag/converted', dataset='jet', dtype='float', force_download=False, full_scalars=False, gaussian_mask=False, hard_cut_rad=inf, input='linear', level_gain=[1.0], load=True, loadfile='./model/maxdim3_nobj126_lr1e-3_1e-7_lrdecay-exp_pt550-650_nepoch_100_data100_run3.pt', log_level='info', logdir='log/', logfile='./log/maxdim3_nobj126_lr1e-3_1e-7_lrdecay-exp_pt550-650_nepoch_100_data100_run3.log', lr_decay=inf, lr_decay_type='exp', lr_final=1e-07, lr_init=0.001, lr_minibatch=True, max_zf=[1], maxdim=[3], mlp=True, mlp_depth=3, mlp_width=2, modeldir='model/', nobj=126, num_basis_fn=10, num_cg_levels=3, num_channels=[2, 4, 4, 2], num_epoch=100, num_mpnn_levels=1, num_test=-1, num_train=-1, num_valid=-1, num_workers=0, optim='amsgrad', parallel=False, pmu_in=True, predict=True, predictdir='predict/', predictfile='./predict/maxdim3_nobj126_lr1e-3_1e-7_lrdecay-exp_pt550-650_nepoch_100_data100_run3', prefix='maxdim3_nobj126_lr1e-3_1e-7_lrdecay-exp_pt550-650_nepoch_100_data100_run3', quiet=True, save=True, scale=0.005, seed=1, sgd_restart=-1, shuffle=True, soft_cut_rad=inf, soft_cut_width=inf, target='is_signal', task='train', test=True, textlog=True, top='linear', verbose=False, weight_decay=0, weight_init='randn', workdir='./')
+Beginning training on CUDA/GPU! Device: 0
+Initializing simulation based upon argument string:
+scripts/train_lgn.py --datadir=/home/jano/clariant/data/toptag/h5 --maxdim=3 --max-zf=1 --num-channels 2 4 4 2 --num-epoch=100 --batch-size=8 --num-cg-levels=3 --scale=0.005 --lr-init=0.001 --lr-final=0.0000001 --mlp=True --alpha=100 --pmu-in=True --nobj=126 --lr-decay-type=exp --v=0 --prefix=maxdim3_nobj126_lr1e-3_1e-7_lrdecay-exp_pt550-650_nepoch_100_data100_run3 --load
+Log, best, checkpoint, load files: ./log/maxdim3_nobj126_lr1e-3_1e-7_lrdecay-exp_pt550-650_nepoch_100_data100_run3.log ./model/maxdim3_nobj126_lr1e-3_1e-7_lrdecay-exp_pt550-650_nepoch_100_data100_run3_best.pt ./model/maxdim3_nobj126_lr1e-3_1e-7_lrdecay-exp_pt550-650_nepoch_100_data100_run3.pt ./model/maxdim3_nobj126_lr1e-3_1e-7_lrdecay-exp_pt550-650_nepoch_100_data100_run3.pt
+Dataset, learning target, datadir: jet is_signal /home/jano/clariant/data/toptag/h5
+Git status: 9780fa9
+
+Values of all model arguments:
+Namespace(activation='leakyrelu', add_beams=True, alpha=100.0, batch_group_size=1, batch_size=8, beam_mass=1, bestfile='./model/maxdim3_nobj126_lr1e-3_1e-7_lrdecay-exp_pt550-650_nepoch_100_data100_run3_best.pt', checkfile='./model/maxdim3_nobj126_lr1e-3_1e-7_lrdecay-exp_pt550-650_nepoch_100_data100_run3.pt', cuda=True, cutoff_decay=0, cutoff_type=['learn'], datadir='/home/jano/clariant/data/toptag/h5', dataset='jet', dtype='float', force_download=False, full_scalars=False, gaussian_mask=False, hard_cut_rad=inf, input='linear', level_gain=[1.0], load=True, loadfile='./model/maxdim3_nobj126_lr1e-3_1e-7_lrdecay-exp_pt550-650_nepoch_100_data100_run3.pt', log_level='info', logdir='log/', logfile='./log/maxdim3_nobj126_lr1e-3_1e-7_lrdecay-exp_pt550-650_nepoch_100_data100_run3.log', lr_decay=inf, lr_decay_type='exp', lr_final=1e-07, lr_init=0.001, lr_minibatch=True, max_zf=[1], maxdim=[3], mlp=True, mlp_depth=3, mlp_width=2, modeldir='model/', nobj=126, num_basis_fn=10, num_cg_levels=3, num_channels=[2, 4, 4, 2], num_epoch=100, num_mpnn_levels=1, num_test=-1, num_train=-1, num_valid=-1, num_workers=0, optim='amsgrad', parallel=False, pmu_in=True, predict=True, predictdir='predict/', predictfile='./predict/maxdim3_nobj126_lr1e-3_1e-7_lrdecay-exp_pt550-650_nepoch_100_data100_run3', prefix='maxdim3_nobj126_lr1e-3_1e-7_lrdecay-exp_pt550-650_nepoch_100_data100_run3', quiet=True, save=True, scale=0.005, seed=1, sgd_restart=-1, shuffle=True, soft_cut_rad=inf, soft_cut_width=inf, target='is_signal', task='train', test=True, textlog=True, top='linear', verbose=False, weight_decay=0, weight_init='randn', workdir='./')
+Beginning training on CUDA/GPU! Device: 0
+Initializing network!
+hard_cut_rad: [inf, inf, inf]
+soft_cut_rad: [inf, inf, inf]
+soft_cut_width: [inf, inf, inf]
+maxdim: [3, 3, 3]
+max_zf: [1, 1, 1]
+num_channels: [2, 4, 4, 2]
+CGdict maxdim: 3
+{(0, 0): 2, (1, 1): 2}
+{(0, 0): 4, (1, 1): 4, (0, 2): 4, (2, 0): 4, (2, 2): 4}
+{(0, 0): 4, (1, 1): 4, (0, 2): 4, (2, 0): 4, (2, 2): 4}
+{(0, 0): 2, (1, 1): 2, (0, 2): 2, (2, 0): 2, (2, 2): 2}
+Model initialized. Number of parameters: 6014
+Testing network for symmetries:
+Beginning covariance test!
+Boost invariance test. The output is a table of [gamma, rel. deviation] tuples:
+[[1.0, 0.0], [1.5430806348152437, 6.187985235328597e-08], [3.7621956910836314, 2.5193941155521316e-07], [10.067661995777765, 2.526023990867543e-06], [27.308232836016487, 8.515109584550373e-06], [74.20994852478785, 0.00019427179358899593], [201.7156361224559, 0.007555096875876188], [548.317035155212, 0.35026228427886963], [1490.479161252178, 314.8424987792969], [4051.5420254925943, 56133.63671875]]
+Rotation invariance test. The output is a table of [angle, rel. deviation] tuples:
+[[0.0, 0.0], [1.0, 6.408984631889325e-08], [2.0, 1.0607974587628632e-07], [3.0, 8.618979308039343e-08], [4.0, 1.2375970470657194e-07], [5.0, 8.618979308039343e-08], [6.0, 5.082987897253588e-08], [7.0, 9.281978208264263e-08], [8.0, 5.303987293814316e-08], [9.0, 6.850983425010782e-08]]
+Averages of components of all tensors:
+ [{(0, 0): 0.341028094291687, (1, 1): 0.0015148506499826908}, {(2, 0): 0.00028773941448889673, (1, 1): 0.008309897035360336, (2, 2): 0.0001920938811963424, (0, 2): 0.00018876531976275146, (0, 0): 0.46027958393096924}, {(2, 0): 9.179608605336398e-05, (1, 1): 0.005473085679113865, (2, 2): 5.054455323261209e-05, (0, 2): 9.847463661571965e-05, (0, 0): 0.16088329255580902}, {(2, 0): 3.490312519716099e-05, (1, 1): 0.0016701980493962765, (2, 2): 2.2857282601762563e-05, (0, 2): 3.597139584599063e-05, (0, 0): 0.21161244809627533}]
+Medians of components of all tensors:
+ [{(0, 0): 0.1873331218957901, (1, 1): 0.0}, {(2, 0): 1.3009151533793784e-09, (1, 1): 0.0034427507780492306, (2, 2): 9.134095307672396e-05, (0, 2): 6.938586372129407e-10, (0, 0): 0.32690662145614624}, {(2, 0): 4.326996531744953e-06, (1, 1): 0.0015645080711692572, (2, 2): 1.956497726496309e-05, (0, 2): 5.118373337609228e-06, (0, 0): 0.15100206434726715}, {(2, 0): 4.821605216420721e-06, (1, 1): 0.0007976050255820155, (2, 2): 7.857797754695639e-06, (0, 2): 5.725064966100035e-06, (0, 0): 0.1769690364599228}]
+Rotation Invariance test (relative): 0.00016512
+Largest deviation in covariance test : 0.020127
+Largest deviation in covariance test 0.020127 detected! Detailed summary (all relative):
+(lvl, key) = (0, (0, 0)) -> 2.9855e-05 (norm) 6.4229e-06 (mean)
+(lvl, key) = (0, (1, 1)) -> 9.5425e-08 (norm) 7.2348e-08 (mean)
+(lvl, key) = (1, (2, 0)) -> 1.1581e-05 (norm) 7.262e-06 (mean)
+(lvl, key) = (1, (1, 1)) -> 0.0070964 (norm) 0.001468 (mean)
+(lvl, key) = (1, (2, 2)) -> 0.013468 (norm) 0.00091071 (mean)
+(lvl, key) = (1, (0, 2)) -> 1.1896e-05 (norm) 7.261e-06 (mean)
+(lvl, key) = (1, (0, 0)) -> 0.0026418 (norm) 0.00050096 (mean)
+(lvl, key) = (2, (2, 0)) -> 0.066089 (norm) 0.02009 (mean)
+(lvl, key) = (2, (1, 1)) -> 0.0079023 (norm) 0.0023177 (mean)
+(lvl, key) = (2, (2, 2)) -> 0.01504 (norm) 0.0021674 (mean)
+(lvl, key) = (2, (0, 2)) -> 0.023936 (norm) 0.0084068 (mean)
+(lvl, key) = (2, (0, 0)) -> 0.0012842 (norm) 0.0002705 (mean)
+(lvl, key) = (3, (2, 0)) -> 0.095676 (norm) 0.12655 (mean)
+(lvl, key) = (3, (1, 1)) -> 0.0097683 (norm) 0.0027221 (mean)
+(lvl, key) = (3, (2, 2)) -> 0.021962 (norm) 0.0028114 (mean)
+(lvl, key) = (3, (0, 2)) -> 0.10741 (norm) 0.12299 (mean)
+(lvl, key) = (3, (0, 0)) -> 0.00038734 (norm) 5.6378e-05 (mean)
+Beginning permutation test!
+Permutation Invariance test error: 0.03357841074466705
+Beginning batch invariance test!
+Batch invariance test error: 3.5359917660571227e-07
+Test complete!
+Loading previous model from checkpoint!
+Loading from checkpoint!
+Best loss from checkpoint: 0.178096993352429 at epoch 44
+Starting Epoch: 45
+Epoch 45 Complete! Current Training Loss:     0.1763     0.9292     0.9743     396.0255 @0.3000
+[[0.456 0.044]
+ [0.027 0.473]]
+
+ROC saved to file ./predict/maxdim3_nobj126_lr1e-3_1e-7_lrdecay-exp_pt550-650_nepoch_100_data100_run3.epoch45.train_ROC.csv
+
+Saving predictions to file: ./predict/maxdim3_nobj126_lr1e-3_1e-7_lrdecay-exp_pt550-650_nepoch_100_data100_run3.final.train.pt
+Saving model to checkpoint file: ./model/maxdim3_nobj126_lr1e-3_1e-7_lrdecay-exp_pt550-650_nepoch_100_data100_run3.pt
+Starting testing on valid set: 
+ Done! (Time: 5166.946693s)
+Epoch 45 Complete! Current Validation Loss:     0.1780     0.9284     0.9738     376.6411 @0.2997
+[[0.454 0.046]
+ [0.025 0.475]]
+
+ROC saved to file ./predict/maxdim3_nobj126_lr1e-3_1e-7_lrdecay-exp_pt550-650_nepoch_100_data100_run3.epoch45.valid_ROC.csv
+
+Saving predictions to file: ./predict/maxdim3_nobj126_lr1e-3_1e-7_lrdecay-exp_pt550-650_nepoch_100_data100_run3.final.valid.pt
+Lowest loss achieved! Saving best model to file: ./model/maxdim3_nobj126_lr1e-3_1e-7_lrdecay-exp_pt550-650_nepoch_100_data100_run3_best.pt
+Epoch 45 complete!
+Starting Epoch: 46
+Epoch 46 Complete! Current Training Loss:     0.1763     0.9293     0.9742     395.2500 @0.3000
+[[0.456 0.044]
+ [0.027 0.473]]
+
+ROC saved to file ./predict/maxdim3_nobj126_lr1e-3_1e-7_lrdecay-exp_pt550-650_nepoch_100_data100_run3.epoch46.train_ROC.csv
+
+Saving predictions to file: ./predict/maxdim3_nobj126_lr1e-3_1e-7_lrdecay-exp_pt550-650_nepoch_100_data100_run3.final.train.pt
+Saving model to checkpoint file: ./model/maxdim3_nobj126_lr1e-3_1e-7_lrdecay-exp_pt550-650_nepoch_100_data100_run3.pt
+Starting testing on valid set: 
+ Done! (Time: 5093.597107s)
+Epoch 46 Complete! Current Validation Loss:     0.1778     0.9286     0.9739     389.0019 @0.3000
+[[0.456 0.044]
+ [0.027 0.473]]
+
+ROC saved to file ./predict/maxdim3_nobj126_lr1e-3_1e-7_lrdecay-exp_pt550-650_nepoch_100_data100_run3.epoch46.valid_ROC.csv
+
+Saving predictions to file: ./predict/maxdim3_nobj126_lr1e-3_1e-7_lrdecay-exp_pt550-650_nepoch_100_data100_run3.final.valid.pt
+Lowest loss achieved! Saving best model to file: ./model/maxdim3_nobj126_lr1e-3_1e-7_lrdecay-exp_pt550-650_nepoch_100_data100_run3_best.pt
+Epoch 46 complete!
+Starting Epoch: 47
+Epoch 47 Complete! Current Training Loss:     0.1762     0.9294     0.9742     396.5442 @0.3000
+[[0.456 0.044]
+ [0.027 0.473]]
+
+ROC saved to file ./predict/maxdim3_nobj126_lr1e-3_1e-7_lrdecay-exp_pt550-650_nepoch_100_data100_run3.epoch47.train_ROC.csv
+
+Saving predictions to file: ./predict/maxdim3_nobj126_lr1e-3_1e-7_lrdecay-exp_pt550-650_nepoch_100_data100_run3.final.train.pt
+Saving model to checkpoint file: ./model/maxdim3_nobj126_lr1e-3_1e-7_lrdecay-exp_pt550-650_nepoch_100_data100_run3.pt
+Starting testing on valid set: 
+ Done! (Time: 5074.931683s)
+Epoch 47 Complete! Current Validation Loss:     0.1779     0.9287     0.9736     375.9384 @0.3000
+[[0.457 0.043]
+ [0.028 0.472]]
+
+ROC saved to file ./predict/maxdim3_nobj126_lr1e-3_1e-7_lrdecay-exp_pt550-650_nepoch_100_data100_run3.epoch47.valid_ROC.csv
+
+Saving predictions to file: ./predict/maxdim3_nobj126_lr1e-3_1e-7_lrdecay-exp_pt550-650_nepoch_100_data100_run3.final.valid.pt
+Epoch 47 complete!
+Starting Epoch: 48
+Epoch 48 Complete! Current Training Loss:     0.1762     0.9293     0.9742     399.9491 @0.3000
+[[0.456 0.044]
+ [0.027 0.473]]
+
+ROC saved to file ./predict/maxdim3_nobj126_lr1e-3_1e-7_lrdecay-exp_pt550-650_nepoch_100_data100_run3.epoch48.train_ROC.csv
+
+Saving predictions to file: ./predict/maxdim3_nobj126_lr1e-3_1e-7_lrdecay-exp_pt550-650_nepoch_100_data100_run3.final.train.pt
+Saving model to checkpoint file: ./model/maxdim3_nobj126_lr1e-3_1e-7_lrdecay-exp_pt550-650_nepoch_100_data100_run3.pt
+Starting testing on valid set: 
+ Done! (Time: 5076.799431s)
+Epoch 48 Complete! Current Validation Loss:     0.1778     0.9285     0.9737     385.2830 @0.3002
+[[0.454 0.046]
+ [0.026 0.474]]
+
+ROC saved to file ./predict/maxdim3_nobj126_lr1e-3_1e-7_lrdecay-exp_pt550-650_nepoch_100_data100_run3.epoch48.valid_ROC.csv
+
+Saving predictions to file: ./predict/maxdim3_nobj126_lr1e-3_1e-7_lrdecay-exp_pt550-650_nepoch_100_data100_run3.final.valid.pt
+Epoch 48 complete!
+Starting Epoch: 49
+Epoch 49 Complete! Current Training Loss:     0.1761     0.9293     0.9743     400.4782 @0.3000
+[[0.456 0.044]
+ [0.027 0.473]]
+
+ROC saved to file ./predict/maxdim3_nobj126_lr1e-3_1e-7_lrdecay-exp_pt550-650_nepoch_100_data100_run3.epoch49.train_ROC.csv
+
+Saving predictions to file: ./predict/maxdim3_nobj126_lr1e-3_1e-7_lrdecay-exp_pt550-650_nepoch_100_data100_run3.final.train.pt
+Saving model to checkpoint file: ./model/maxdim3_nobj126_lr1e-3_1e-7_lrdecay-exp_pt550-650_nepoch_100_data100_run3.pt
+Starting testing on valid set: 
+ Done! (Time: 5065.811935s)
+Epoch 49 Complete! Current Validation Loss:     0.1781     0.9285     0.9740     391.2680 @0.3000
+[[0.453 0.047]
+ [0.024 0.475]]
+
+ROC saved to file ./predict/maxdim3_nobj126_lr1e-3_1e-7_lrdecay-exp_pt550-650_nepoch_100_data100_run3.epoch49.valid_ROC.csv
+
+Saving predictions to file: ./predict/maxdim3_nobj126_lr1e-3_1e-7_lrdecay-exp_pt550-650_nepoch_100_data100_run3.final.valid.pt
+Epoch 49 complete!
+Starting Epoch: 50
+Epoch 50 Complete! Current Training Loss:     0.1761     0.9294     0.9743     397.0643 @0.3000
+[[0.456 0.044]
+ [0.027 0.473]]
+
+ROC saved to file ./predict/maxdim3_nobj126_lr1e-3_1e-7_lrdecay-exp_pt550-650_nepoch_100_data100_run3.epoch50.train_ROC.csv
+
+Saving predictions to file: ./predict/maxdim3_nobj126_lr1e-3_1e-7_lrdecay-exp_pt550-650_nepoch_100_data100_run3.final.train.pt
+Saving model to checkpoint file: ./model/maxdim3_nobj126_lr1e-3_1e-7_lrdecay-exp_pt550-650_nepoch_100_data100_run3.pt
+Starting testing on valid set: 
+ Done! (Time: 5039.941797s)
+Epoch 50 Complete! Current Validation Loss:     0.1778     0.9286     0.9740     392.0292 @0.3000
+[[0.456 0.044]
+ [0.027 0.473]]
+
+ROC saved to file ./predict/maxdim3_nobj126_lr1e-3_1e-7_lrdecay-exp_pt550-650_nepoch_100_data100_run3.epoch50.valid_ROC.csv
+
+Saving predictions to file: ./predict/maxdim3_nobj126_lr1e-3_1e-7_lrdecay-exp_pt550-650_nepoch_100_data100_run3.final.valid.pt
+Lowest loss achieved! Saving best model to file: ./model/maxdim3_nobj126_lr1e-3_1e-7_lrdecay-exp_pt550-650_nepoch_100_data100_run3_best.pt
+Epoch 50 complete!
+Starting Epoch: 51
+Epoch 51 Complete! Current Training Loss:     0.1760     0.9295     0.9742     399.1582 @0.3000
+[[0.456 0.044]
+ [0.027 0.473]]
+
+ROC saved to file ./predict/maxdim3_nobj126_lr1e-3_1e-7_lrdecay-exp_pt550-650_nepoch_100_data100_run3.epoch51.train_ROC.csv
+
+Saving predictions to file: ./predict/maxdim3_nobj126_lr1e-3_1e-7_lrdecay-exp_pt550-650_nepoch_100_data100_run3.final.train.pt
+Saving model to checkpoint file: ./model/maxdim3_nobj126_lr1e-3_1e-7_lrdecay-exp_pt550-650_nepoch_100_data100_run3.pt
+Starting testing on valid set: 
+ Done! (Time: 3508.71513s)
+Epoch 51 Complete! Current Validation Loss:     0.1777     0.9286     0.9740     389.0019 @0.2999
+[[0.455 0.045]
+ [0.027 0.473]]
+
+ROC saved to file ./predict/maxdim3_nobj126_lr1e-3_1e-7_lrdecay-exp_pt550-650_nepoch_100_data100_run3.epoch51.valid_ROC.csv
+
+Saving predictions to file: ./predict/maxdim3_nobj126_lr1e-3_1e-7_lrdecay-exp_pt550-650_nepoch_100_data100_run3.final.valid.pt
+Lowest loss achieved! Saving best model to file: ./model/maxdim3_nobj126_lr1e-3_1e-7_lrdecay-exp_pt550-650_nepoch_100_data100_run3_best.pt
+Epoch 51 complete!
+Starting Epoch: 52
+Epoch 52 Complete! Current Training Loss:     0.1760     0.9294     0.9743     404.7614 @0.3000
+[[0.456 0.044]
+ [0.027 0.473]]
+
+ROC saved to file ./predict/maxdim3_nobj126_lr1e-3_1e-7_lrdecay-exp_pt550-650_nepoch_100_data100_run3.epoch52.train_ROC.csv
+
+Saving predictions to file: ./predict/maxdim3_nobj126_lr1e-3_1e-7_lrdecay-exp_pt550-650_nepoch_100_data100_run3.final.train.pt
+Saving model to checkpoint file: ./model/maxdim3_nobj126_lr1e-3_1e-7_lrdecay-exp_pt550-650_nepoch_100_data100_run3.pt
+Starting testing on valid set: 
+ Done! (Time: 2288.422006s)
+Epoch 52 Complete! Current Validation Loss:     0.1778     0.9286     0.9738     381.6345 @0.3002
+[[0.455 0.045]
+ [0.027 0.473]]
+
+ROC saved to file ./predict/maxdim3_nobj126_lr1e-3_1e-7_lrdecay-exp_pt550-650_nepoch_100_data100_run3.epoch52.valid_ROC.csv
+
+Saving predictions to file: ./predict/maxdim3_nobj126_lr1e-3_1e-7_lrdecay-exp_pt550-650_nepoch_100_data100_run3.final.valid.pt
+Epoch 52 complete!
+Starting Epoch: 53
+Initializing simulation based upon argument string:
+scripts/train_lgn.py --datadir=/home/jano/clariant/data/toptag/h5 --maxdim=3 --max-zf=1 --num-channels 2 4 4 2 --num-epoch=100 --batch-size=8 --num-cg-levels=3 --scale=0.005 --lr-init=0.001 --lr-final=0.0000001 --mlp=True --alpha=100 --pmu-in=True --nobj=126 --lr-decay-type=exp --v=0 --prefix=maxdim3_nobj126_lr1e-3_1e-7_lrdecay-exp_pt550-650_nepoch_100_data100_run3 --load
+Log, best, checkpoint, load files: ./log/maxdim3_nobj126_lr1e-3_1e-7_lrdecay-exp_pt550-650_nepoch_100_data100_run3.log ./model/maxdim3_nobj126_lr1e-3_1e-7_lrdecay-exp_pt550-650_nepoch_100_data100_run3_best.pt ./model/maxdim3_nobj126_lr1e-3_1e-7_lrdecay-exp_pt550-650_nepoch_100_data100_run3.pt ./model/maxdim3_nobj126_lr1e-3_1e-7_lrdecay-exp_pt550-650_nepoch_100_data100_run3.pt
+Dataset, learning target, datadir: jet is_signal /home/jano/clariant/data/toptag/h5
+Git status: ef3d333
+
+Values of all model arguments:
+Namespace(activation='leakyrelu', add_beams=True, alpha=100.0, batch_group_size=1, batch_size=8, beam_mass=1, bestfile='./model/maxdim3_nobj126_lr1e-3_1e-7_lrdecay-exp_pt550-650_nepoch_100_data100_run3_best.pt', checkfile='./model/maxdim3_nobj126_lr1e-3_1e-7_lrdecay-exp_pt550-650_nepoch_100_data100_run3.pt', cuda=True, cutoff_decay=0, cutoff_type=['learn'], datadir='/home/jano/clariant/data/toptag/h5', dataset='jet', dtype='float', force_download=False, full_scalars=False, gaussian_mask=False, hard_cut_rad=inf, input='linear', level_gain=[1.0], load=True, loadfile='./model/maxdim3_nobj126_lr1e-3_1e-7_lrdecay-exp_pt550-650_nepoch_100_data100_run3.pt', log_level='info', logdir='log/', logfile='./log/maxdim3_nobj126_lr1e-3_1e-7_lrdecay-exp_pt550-650_nepoch_100_data100_run3.log', lr_decay=inf, lr_decay_type='exp', lr_final=1e-07, lr_init=0.001, lr_minibatch=True, max_zf=[1], maxdim=[3], mlp=True, mlp_depth=3, mlp_width=2, modeldir='model/', nobj=126, num_basis_fn=10, num_cg_levels=3, num_channels=[2, 4, 4, 2], num_epoch=100, num_mpnn_levels=1, num_test=-1, num_train=-1, num_valid=-1, num_workers=0, optim='amsgrad', parallel=False, pmu_in=True, predict=True, predictdir='predict/', predictfile='./predict/maxdim3_nobj126_lr1e-3_1e-7_lrdecay-exp_pt550-650_nepoch_100_data100_run3', prefix='maxdim3_nobj126_lr1e-3_1e-7_lrdecay-exp_pt550-650_nepoch_100_data100_run3', quiet=True, save=True, scale=0.005, seed=1, sgd_restart=-1, shuffle=True, soft_cut_rad=inf, soft_cut_width=inf, target='is_signal', task='train', test=True, textlog=True, top='linear', verbose=False, weight_decay=0, weight_init='randn', workdir='./')
+Beginning training on CUDA/GPU! Device: 0
+Initializing network!
+hard_cut_rad: [inf, inf, inf]
+soft_cut_rad: [inf, inf, inf]
+soft_cut_width: [inf, inf, inf]
+maxdim: [3, 3, 3]
+max_zf: [1, 1, 1]
+num_channels: [2, 4, 4, 2]
+CGdict maxdim: 3
+{(0, 0): 2, (1, 1): 2}
+{(0, 0): 4, (1, 1): 4, (0, 2): 4, (2, 0): 4, (2, 2): 4}
+{(0, 0): 4, (1, 1): 4, (0, 2): 4, (2, 0): 4, (2, 2): 4}
+{(0, 0): 2, (1, 1): 2, (0, 2): 2, (2, 0): 2, (2, 2): 2}
+Model initialized. Number of parameters: 6014
+Testing network for symmetries:
+Beginning covariance test!
+Boost invariance test. The output is a table of [gamma, rel. deviation] tuples:
+[[1.0, 0.0], [1.5430806348152437, 1.9101523207609716e-07], [3.7621956910836314, 2.0756988305947743e-06], [10.067661995777765, 6.29218311587465e-06], [27.308232836016487, 3.992029814980924e-05], [74.20994852478785, 0.0019105131505057216], [201.7156361224559, 0.06634248793125153], [548.317035155212, 24.202119827270508], [1490.479161252178, 17044.255859375], [4051.5420254925943, 1059623.375]]
+Rotation invariance test. The output is a table of [angle, rel. deviation] tuples:
+[[0.0, 0.0], [1.0, 2.641198193487071e-07], [2.0, 1.9950479668295884e-07], [3.0, 2.1223914359325136e-07], [4.0, 3.211885939435888e-07], [5.0, 2.1082422563267755e-07], [6.0, 2.202570783538249e-07], [7.0, 2.466690602886956e-07], [8.0, 3.027945183475822e-07], [9.0, 2.0233466102581588e-07]]
+Averages of components of all tensors:
+ [{(0, 0): 0.37269270420074463, (1, 1): 0.0018620721530169249}, {(2, 0): 0.0001397911983076483, (1, 1): 0.021456051617860794, (2, 2): 0.0005664669442921877, (0, 2): 0.00030262849759310484, (0, 0): 0.20709870755672455}, {(2, 0): 0.00016856803267728537, (1, 1): 0.00643892353400588, (2, 2): 0.00023783769574947655, (0, 2): 0.00012677148333750665, (0, 0): 0.15582922101020813}, {(2, 0): 6.975336873438209e-05, (1, 1): 0.002549287397414446, (2, 2): 0.00012201425124658272, (0, 2): 5.880694880033843e-05, (0, 0): 0.17318475246429443}]
+Medians of components of all tensors:
+ [{(0, 0): 0.29265114665031433, (1, 1): 0.0}, {(2, 0): 2.963457257365576e-09, (1, 1): 0.0067783440463244915, (2, 2): 0.00010543898679316044, (0, 2): 4.1454160104592574e-09, (0, 0): 0.17470195889472961}, {(2, 0): 1.430651536793448e-05, (1, 1): 0.00196022167801857, (2, 2): 6.373439100570977e-05, (0, 2): 9.515247256786097e-06, (0, 0): 0.13337746262550354}, {(2, 0): 1.2617379070434254e-05, (1, 1): 0.0011222910834476352, (2, 2): 2.56258063018322e-05, (0, 2): 9.611367204342969e-06, (0, 0): 0.05454088747501373}]
+Rotation Invariance test (relative): 0.00018917
+Largest deviation in covariance test : 0.042093
+Largest deviation in covariance test 0.042093 detected! Detailed summary (all relative):
+(lvl, key) = (0, (0, 0)) -> 0.0001808 (norm) 4.0733e-05 (mean)
+(lvl, key) = (0, (1, 1)) -> 1.0363e-07 (norm) 9.6186e-08 (mean)
+(lvl, key) = (1, (2, 0)) -> 7.3666e-06 (norm) 1.905e-05 (mean)
+(lvl, key) = (1, (1, 1)) -> 0.0077251 (norm) 0.001577 (mean)
+(lvl, key) = (1, (2, 2)) -> 0.015748 (norm) 0.0010554 (mean)
+(lvl, key) = (1, (0, 2)) -> 6.1529e-06 (norm) 1.6516e-05 (mean)
+(lvl, key) = (1, (0, 0)) -> 0.0019883 (norm) 0.00027497 (mean)
+(lvl, key) = (2, (2, 0)) -> 0.025747 (norm) 0.0068364 (mean)
+(lvl, key) = (2, (1, 1)) -> 0.011802 (norm) 0.0025007 (mean)
+(lvl, key) = (2, (2, 2)) -> 0.019423 (norm) 0.0031099 (mean)
+(lvl, key) = (2, (0, 2)) -> 0.020028 (norm) 0.0055615 (mean)
+(lvl, key) = (2, (0, 0)) -> 0.0011319 (norm) 0.00020333 (mean)
+(lvl, key) = (3, (2, 0)) -> 0.11579 (norm) 0.058905 (mean)
+(lvl, key) = (3, (1, 1)) -> 0.013665 (norm) 0.0038414 (mean)
+(lvl, key) = (3, (2, 2)) -> 0.024674 (norm) 0.0039218 (mean)
+(lvl, key) = (3, (0, 2)) -> 0.099995 (norm) 0.10079 (mean)
+(lvl, key) = (3, (0, 0)) -> 0.00024188 (norm) 9.4272e-05 (mean)
+Beginning permutation test!
+Permutation Invariance test error: 0.5797884464263916
+Beginning batch invariance test!
+Batch invariance test error: 7.24442884347809e-07
+Test complete!
+Loading previous model from checkpoint!
+Loading from checkpoint!
+Best loss from checkpoint: 0.17771476243945422 at epoch 52
+Starting Epoch: 53
+Epoch 53 Complete! Current Training Loss:     0.1760     0.9294     0.9742     397.8469 @0.3000     LR: 7.59E-06
+[[0.456 0.044]
+ [0.027 0.473]]
+
+ROC saved to file ./predict/maxdim3_nobj126_lr1e-3_1e-7_lrdecay-exp_pt550-650_nepoch_100_data100_run3.epoch53.train_ROC.csv
+
+Saving predictions to file: ./predict/maxdim3_nobj126_lr1e-3_1e-7_lrdecay-exp_pt550-650_nepoch_100_data100_run3.final.train.pt
+Saving model to checkpoint file: ./model/maxdim3_nobj126_lr1e-3_1e-7_lrdecay-exp_pt550-650_nepoch_100_data100_run3.pt
+Starting testing on valid set: 
+ Done! (Time: 2207.545951s)
+Epoch 53 Complete! Current Validation Loss:     0.1777     0.9286     0.9737     380.9130 @0.3000     LR: 7.59E-06
+[[0.456 0.044]
+ [0.028 0.472]]
+
+ROC saved to file ./predict/maxdim3_nobj126_lr1e-3_1e-7_lrdecay-exp_pt550-650_nepoch_100_data100_run3.epoch53.valid_ROC.csv
+
+Saving predictions to file: ./predict/maxdim3_nobj126_lr1e-3_1e-7_lrdecay-exp_pt550-650_nepoch_100_data100_run3.final.valid.pt
+Epoch 53 complete!
+Starting Epoch: 54
+Initializing simulation based upon argument string:
+scripts/train_lgn.py --datadir=/home/jano/clariant/data/toptag/h5 --maxdim=3 --max-zf=1 --num-channels 2 4 4 2 --num-epoch=53 --batch-size=8 --num-cg-levels=3 --scale=0.005 --lr-init=0.001 --lr-final=0.0000001 --mlp=True --alpha=100 --pmu-in=True --nobj=126 --lr-decay-type=exp --prefix=maxdim3_nobj126_lr1e-3_1e-7_lrdecay-exp_pt550-650_nepoch_100_data100_run3 --load
+Log, best, checkpoint, load files: ./log/maxdim3_nobj126_lr1e-3_1e-7_lrdecay-exp_pt550-650_nepoch_100_data100_run3.log ./model/maxdim3_nobj126_lr1e-3_1e-7_lrdecay-exp_pt550-650_nepoch_100_data100_run3_best.pt ./model/maxdim3_nobj126_lr1e-3_1e-7_lrdecay-exp_pt550-650_nepoch_100_data100_run3.pt ./model/maxdim3_nobj126_lr1e-3_1e-7_lrdecay-exp_pt550-650_nepoch_100_data100_run3.pt
+Dataset, learning target, datadir: jet is_signal /home/jano/clariant/data/toptag/h5
+Git status: ef3d333
+
+Values of all model arguments:
+Namespace(activation='leakyrelu', add_beams=True, alpha=100.0, batch_group_size=1, batch_size=8, beam_mass=1, bestfile='./model/maxdim3_nobj126_lr1e-3_1e-7_lrdecay-exp_pt550-650_nepoch_100_data100_run3_best.pt', checkfile='./model/maxdim3_nobj126_lr1e-3_1e-7_lrdecay-exp_pt550-650_nepoch_100_data100_run3.pt', cuda=True, cutoff_decay=0, cutoff_type=['learn'], datadir='/home/jano/clariant/data/toptag/h5', dataset='jet', dtype='float', force_download=False, full_scalars=False, gaussian_mask=False, hard_cut_rad=inf, input='linear', level_gain=[1.0], load=True, loadfile='./model/maxdim3_nobj126_lr1e-3_1e-7_lrdecay-exp_pt550-650_nepoch_100_data100_run3.pt', log_level='info', logdir='log/', logfile='./log/maxdim3_nobj126_lr1e-3_1e-7_lrdecay-exp_pt550-650_nepoch_100_data100_run3.log', lr_decay=inf, lr_decay_type='exp', lr_final=1e-07, lr_init=0.001, lr_minibatch=True, max_zf=[1], maxdim=[3], mlp=True, mlp_depth=3, mlp_width=2, modeldir='model/', nobj=126, num_basis_fn=10, num_cg_levels=3, num_channels=[2, 4, 4, 2], num_epoch=53, num_mpnn_levels=1, num_test=-1, num_train=-1, num_valid=-1, num_workers=0, optim='amsgrad', parallel=False, pmu_in=True, predict=True, predictdir='predict/', predictfile='./predict/maxdim3_nobj126_lr1e-3_1e-7_lrdecay-exp_pt550-650_nepoch_100_data100_run3', prefix='maxdim3_nobj126_lr1e-3_1e-7_lrdecay-exp_pt550-650_nepoch_100_data100_run3', quiet=True, save=True, scale=0.005, seed=1, sgd_restart=-1, shuffle=True, soft_cut_rad=inf, soft_cut_width=inf, target='is_signal', task='train', test=True, textlog=True, top='linear', verbose=True, weight_decay=0, weight_init='randn', workdir='./')
+Beginning training on CUDA/GPU! Device: 0
+Initializing network!
+hard_cut_rad: [inf, inf, inf]
+soft_cut_rad: [inf, inf, inf]
+soft_cut_width: [inf, inf, inf]
+maxdim: [3, 3, 3]
+max_zf: [1, 1, 1]
+num_channels: [2, 4, 4, 2]
+CGdict maxdim: 3
+{(0, 0): 2, (1, 1): 2}
+{(0, 0): 4, (1, 1): 4, (0, 2): 4, (2, 0): 4, (2, 2): 4}
+{(0, 0): 4, (1, 1): 4, (0, 2): 4, (2, 0): 4, (2, 2): 4}
+{(0, 0): 2, (1, 1): 2, (0, 2): 2, (2, 0): 2, (2, 2): 2}
+Model initialized. Number of parameters: 6014
+Testing network for symmetries:
+Beginning covariance test!
+Boost invariance test. The output is a table of [gamma, rel. deviation] tuples:
+[[1.0, 0.0], [1.5430806348152437, 1.1565300894744723e-07], [3.7621956910836314, 4.2406102807035495e-07], [10.067661995777765, 2.038919774349779e-06], [27.308232836016487, 2.469834180374164e-05], [74.20994852478785, 0.00022085869568400085], [201.7156361224559, 0.002276843646541238], [548.317035155212, 0.13016080856323242], [1490.479161252178, 51.15162658691406], [4051.5420254925943, 30914.30078125]]
+Rotation invariance test. The output is a table of [angle, rel. deviation] tuples:
+[[0.0, 0.0], [1.0, 1.713377884016154e-07], [2.0, 1.1565300894744723e-07], [3.0, 8.138545126712415e-08], [4.0, 1.1136956601376369e-07], [5.0, 8.138545126712415e-08], [6.0, 1.456371165886594e-07], [7.0, 1.2421989481481432e-07], [8.0, 1.1565300894744723e-07], [9.0, 1.756212384407263e-07]]
+Averages of components of all tensors:
+ [{(0, 0): 0.37138622999191284, (1, 1): 0.0012156427837908268}, {(2, 0): 0.0001457721518818289, (1, 1): 0.007898474112153053, (2, 2): 0.00014012891915626824, (0, 2): 0.00015356746735051274, (0, 0): 0.18119926750659943}, {(2, 0): 9.006884647533298e-05, (1, 1): 0.002669313922524452, (2, 2): 4.2151437810389325e-05, (0, 2): 7.086139521561563e-05, (0, 0): 0.1288556456565857}, {(2, 0): 3.675468178698793e-05, (1, 1): 0.0012737349607050419, (2, 2): 2.12833965633763e-05, (0, 2): 2.87909042526735e-05, (0, 0): 0.21146386861801147}]
+Medians of components of all tensors:
+ [{(0, 0): 0.2827799916267395, (1, 1): 0.0}, {(2, 0): 7.998782747264954e-10, (1, 1): 0.0025391115341335535, (2, 2): 6.70576118864119e-05, (0, 2): 9.146128854276014e-10, (0, 0): 0.1905919909477234}, {(2, 0): 4.726261067844462e-06, (1, 1): 0.0007443660870194435, (2, 2): 1.3762146409135312e-05, (0, 2): 2.678618557183654e-06, (0, 0): 0.07724162191152573}, {(2, 0): 3.4436420719430316e-06, (1, 1): 0.0006386567838490009, (2, 2): 6.922152351762634e-06, (0, 2): 3.4928173135995166e-06, (0, 0): 0.1814247965812683}]
+Rotation Invariance test (relative): 0.00049956
+Largest deviation in covariance test : 0.012554
+Largest deviation in covariance test 0.012554 detected! Detailed summary (all relative):
+(lvl, key) = (0, (0, 0)) -> 0.0001136 (norm) 2.1925e-05 (mean)
+(lvl, key) = (0, (1, 1)) -> 1.0255e-07 (norm) 8.122e-08 (mean)
+(lvl, key) = (1, (2, 0)) -> 1.5473e-05 (norm) 1.342e-05 (mean)
+(lvl, key) = (1, (1, 1)) -> 0.0082985 (norm) 0.0011891 (mean)
+(lvl, key) = (1, (2, 2)) -> 0.014138 (norm) 0.00090194 (mean)
+(lvl, key) = (1, (0, 2)) -> 1.6962e-05 (norm) 1.603e-05 (mean)
+(lvl, key) = (1, (0, 0)) -> 0.0037792 (norm) 0.00052487 (mean)
+(lvl, key) = (2, (2, 0)) -> 0.054653 (norm) 0.016006 (mean)
+(lvl, key) = (2, (1, 1)) -> 0.0078216 (norm) 0.0026584 (mean)
+(lvl, key) = (2, (2, 2)) -> 0.012554 (norm) 0.0017346 (mean)
+(lvl, key) = (2, (0, 2)) -> 0.069229 (norm) 0.020228 (mean)
+(lvl, key) = (2, (0, 0)) -> 0.00089553 (norm) 0.00027225 (mean)
+(lvl, key) = (3, (2, 0)) -> 0.088662 (norm) 0.08739 (mean)
+(lvl, key) = (3, (1, 1)) -> 0.012267 (norm) 0.0022456 (mean)
+(lvl, key) = (3, (2, 2)) -> 0.010965 (norm) 0.0047051 (mean)
+(lvl, key) = (3, (0, 2)) -> 0.19008 (norm) 0.28274 (mean)
+(lvl, key) = (3, (0, 0)) -> 0.0001399 (norm) 2.68e-05 (mean)
+Beginning permutation test!
+Permutation Invariance test error: 0.24284476041793823
+Beginning batch invariance test!
+Batch invariance test error: 2.741404330208752e-07
+Test complete!
+Loading previous model from checkpoint!
+Loading from checkpoint!
+Best loss from checkpoint: 0.17771476243945422 at epoch 53
+Getting predictions for model in last checkpoint.
+Starting testing on test set: 
+ Done! (Time: 2202.062788s)
+Training Complete! Final Testing Loss:     0.1752     0.9296     0.9746     443.7670 @0.3001
+[[0.457 0.043]
+ [0.028 0.473]]
+
+ROC saved to file ./predict/maxdim3_nobj126_lr1e-3_1e-7_lrdecay-exp_pt550-650_nepoch_100_data100_run3.best.test_ROC.csv
+
+Saving predictions to file: ./predict/maxdim3_nobj126_lr1e-3_1e-7_lrdecay-exp_pt550-650_nepoch_100_data100_run3.best.test.pt
+Getting predictions for best model (epoch 51).
+Starting testing on test set: 
+ Done! (Time: 2119.179768s)
+Training Complete! Best Testing Loss:     0.1752     0.9296     0.9748     451.7092 @0.3001
+[[0.456 0.044]
+ [0.027 0.474]]
+
+ROC saved to file ./predict/maxdim3_nobj126_lr1e-3_1e-7_lrdecay-exp_pt550-650_nepoch_100_data100_run3.best.test_ROC.csv
+
+Saving predictions to file: ./predict/maxdim3_nobj126_lr1e-3_1e-7_lrdecay-exp_pt550-650_nepoch_100_data100_run3.best.test.pt
+Inference phase complete!
