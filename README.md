@@ -4,7 +4,7 @@ Neural network architecture that is fully equivariant with respect to transforma
 
 ## Overview
 
-This repository holds the software and technical information for a new neural network architecture design based on Lorentz Group Equivariance. The usage and performance of this network is deployed and demonstrated in context of high energy hadronic jet physics. 
+This repository holds the software and technical information for a new neural network architecture design based on Lorentz Group Equivariance. The usage and performance of this network is deployed and demonstrated in context of high energy hadronic jet physics.
 
 
 ## Dependencies
@@ -16,13 +16,13 @@ The code in this repository can be broken down in three categories, correspondin
 
 ##### Dataset conversion
 - Python3 libraries: [h5py](https://www.h5py.org), [numba](https://numba.pydata.org), [numpy](https://numpy.org), [pandas](https://pandas.pydata.org)
-- [HTCondor](https://research.cs.wisc.edu/htcondor/) 
+- [HTCondor](https://research.cs.wisc.edu/htcondor/)
    - optional, highly recommended (for parallelizing conversion tasks)
 - [ROOT](https://root.cern.ch) (& [PyROOT](https://root.cern.ch/pyroot))
     - optional
 
 ##### Network training
-- Python3 libraries: [cudatoolkit](https://anaconda.org/anaconda/cudatoolkit), [h5py](https://www.h5py.org), [PyTorch](https://pytorch.org), [torchvision](https://pytorch.org/docs/stable/torchvision/index.html) 
+- Python3 libraries: [cudatoolkit](https://anaconda.org/anaconda/cudatoolkit), [h5py](https://www.h5py.org), [PyTorch](https://pytorch.org), [torchvision](https://pytorch.org/docs/stable/torchvision/index.html)
     - easy setup via conda (see further down)
 
 ##### Plotting
@@ -58,7 +58,7 @@ In order to explain how to train the network, we will focus on the example of pe
 ### Basic Training
 
 ##### 1) Converting the dataset
-First, we need to convert the dataset files into a format that our network's data-loading utilities (and our plotting utilities) understand. This is especially important since we may want to use different datasets from different sources, each with their own formats & organizations -- converting each to a single format avoids the need for multiple PyTorch `Dataset` classes and duplicate plotting scripts. 
+First, we need to convert the dataset files into a format that our network's data-loading utilities (and our plotting utilities) understand. This is especially important since we may want to use different datasets from different sources, each with their own formats & organizations -- converting each to a single format avoids the need for multiple PyTorch `Dataset` classes and duplicate plotting scripts.
 
 In the case of the top-tagging dataset, this conversion is very lightweight: The dataset, like the format our network uses, stores jet constituents as lists of momentum 4-vectors in Cartesian format `(E, px, py, pz)`, where the z-axis corresponds with the beamline. All we need to do is copy the data from a pandas `DataFrame` (saved in an HDF5 file) to a new HDF5 file written using h5py.
 
@@ -103,7 +103,7 @@ With the data files ready to be read into the network, it's time for training! S
     ```
     This last script can be passed a wide range of arguments, corresponding with hyperparameters & network configurations. For example, one may consider the following:
     ```
-    scripts/train_lormorant.py --datadir=/path/to/dir/with/converted/data/files --maxdim=3 --max-zf=1 --num-channels 2 4 4 2 --num-epoch=10 --batch-size=8 --num-cg-levels=3 --lr-init=0.001 --lr-final=0.00001 --mlp=True --pmu-in=True --nobj=126 --prefix=my_lgn_config --verbose=0
+    scripts/train_lgn.py --datadir=/path/to/dir/with/converted/data/files --maxdim=3 --max-zf=1 --num-channels 2 4 4 2 --num-epoch=10 --batch-size=8 --num-cg-levels=3 --lr-init=0.001 --lr-final=0.00001 --mlp=True --pmu-in=True --nobj=126 --prefix=my_lgn_config --verbose=0
     ```
     - `datadir`: Directory containing the *converted* top-tagging files.
     - `maxdim`: Maximum dimensionality of tensors produced in the network.
@@ -117,7 +117,7 @@ With the data files ready to be read into the network, it's time for training! S
     - `mlp`: Whether or not to insert MLP's acting on Lorentz-invariant scalars within the CG layers.
     - `pmu-in`: Whether or not to feed in 4-momenta themselves to the first CG layer, in addition to scalars.
     - `nobj`: Max number of jet constituents to use for entry. Constituents are ordered by decreasing `pT`, so the network uses the `nobj` leading constituents.
-    
+
     For a full list of possible arguments for `train_lgn.py`, see `/NetworkDesign/src/lgn/engine/args.py`.
 
 ##### 3) Plotting Network Diagnostics & Dataset Kinematics
