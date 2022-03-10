@@ -135,6 +135,7 @@ dmypy.json
 
 # test data files
 data/sample_data
+data/v0
 
 # output files
 predict/*

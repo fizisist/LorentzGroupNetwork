@@ -1,5 +1,6 @@
 import torch
 from lgn.engine.utils import init_scheduler, init_optimizer
+
 # from torch.utils.data import DataLoader
 # import torch.optim as optim
 # import torch.optim.lr_scheduler as sched
@@ -114,7 +115,7 @@ class Trainer:
     def load_state(self, checkfile):
         logger.info('Loading from checkpoint!')
 
-        checkpoint = torch.load(checkfile)
+        checkpoint = torch.load(checkfile, map_location=torch.device('cpu') if not self.args.cuda else None)
         self.model.load_state_dict(checkpoint['model_state'])
         self.optimizer.load_state_dict(checkpoint['optimizer_state'])
         self.scheduler.load_state_dict(checkpoint['scheduler_state'])
@@ -141,7 +142,7 @@ class Trainer:
             logger.info('Getting predictions for model in last checkpoint.')
 
             # Load checkpoint model to make predictions
-            checkpoint = torch.load(self.args.checkfile)
+            checkpoint = torch.load(self.args.checkfile, map_location=torch.device('cpu') if not self.args.cuda else None)
             final_epoch = checkpoint['epoch']
             self.model.load_state_dict(checkpoint['model_state'])
 
@@ -153,7 +154,7 @@ class Trainer:
         # Evaluate best model as determined by validation error
         if best:
             # Load best model to make predictions
-            checkpoint = torch.load(self.args.bestfile)
+            checkpoint = torch.load(self.args.bestfile, map_location=torch.device('cpu') if not self.args.cuda else None)
             self.model.load_state_dict(checkpoint['model_state'])
             if (not final) or (final and not checkpoint['epoch'] == final_epoch):
                 logger.info(f'Getting predictions for best model (epoch {checkpoint["epoch"]}).')
